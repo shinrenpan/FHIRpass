@@ -66,7 +66,6 @@
 		CDDF8E1AFCB7B456262FEB5E /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		D0EA5E2214F0B82A147E27E0 /* HospitalListViewModel+APIs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HospitalListViewModel+APIs.swift"; sourceTree = "<group>"; };
 		E04C931D21D3471BBBE854D1 /* FHIRpass.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = FHIRpass.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		E61064B21705526E6139D613 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
 		EC29BF72003BC875EA262B98 /* Deeplink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deeplink.swift; sourceTree = "<group>"; };
 		F7873B2CAB6F6B4BBBCC973B /* QRCodeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeViewModel.swift; sourceTree = "<group>"; };
 		FF1FB485B870A29BC5D0132F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -85,7 +84,6 @@
 		095FA23183B3DFCA27345BB2 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				E61064B21705526E6139D613 /* .gitkeep */,
 			);
 			path = Tests;
 			sourceTree = "<group>";

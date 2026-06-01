@@ -7,7 +7,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
-from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from shared.qr_codec import decode, to_tw_core_patient
@@ -62,4 +61,3 @@ _frontend = Path(__file__).resolve().parents[2] / "frontend"
 def index():
     return FileResponse(_frontend / "index.html")
 
-app.mount("/static", StaticFiles(directory=str(_frontend)), name="static")

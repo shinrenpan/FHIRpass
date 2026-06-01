@@ -47,6 +47,7 @@ extension ProfileViewModel {
       loadProfile()
     case .editTap:
       state.isEditing = true
+      state.saveStatus = .prepare
     case .cancelTap:
       state.isEditing = false
       loadProfile()

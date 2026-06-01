@@ -18,6 +18,8 @@ targets:
           - CFBundleURLName: com.joe.fhirpass
             CFBundleURLSchemes:
               - fhirpass
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true  # 允許 http://localhost 呼叫本機中台（開發用）
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
           UISceneConfigurations:
