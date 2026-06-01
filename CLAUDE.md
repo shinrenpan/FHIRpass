@@ -46,27 +46,36 @@ FHIRpass/
 
 ## 端對端整合測試架構
 
-使用本地 **SMART Dev Sandbox**（SMART Health IT 官方 Docker image，HAPI FHIR + OAuth2 Launcher 一體），完整串接軌道一與軌道二：
+使用本地 **SMART Dev Sandbox**（`make sandbox`）：
+
+| 服務 | 角色 | URL |
+|------|------|-----|
+| `hapiproject/hapi` + TW Core IG | 醫院 FHIR Server | `http://localhost:9090/fhir` |
+| `smartonfhir/smart-launcher-2` | OAuth2 + FHIR Proxy | `http://localhost:9091` |
+
+iOS App 連接的 FHIR base URL 是 Launcher proxy：`http://localhost:9091/v/r4/fhir`
 
 ```
 軌道一：Counter 掃 QR
   → 解碼病人資料
-  → POST Patient 到本地沙盒（http://localhost:9090/fhir）
+  → POST Patient 到 http://localhost:9090/fhir/Patient
   → 取得 Patient FHIR ID
 
-軌道二：iOS App OAuth2 登入
+軌道二：iOS App OAuth2 登入（經 Launcher port 9091）
   → Launcher 列出沙盒內所有 Patient（含剛 POST 的）
-  → 病患選取自己
-  → token.patient = 該 FHIR ID
+  → 病患選取自己 → token.patient = 該 FHIR ID
   → 呼叫 FHIR API 讀取同一筆病歷
 ```
 
-啟動：`make sandbox`（待實作）。
+> seed URL 使用 `localhost`，僅適用於 iOS Simulator。
+> 實機測試需將 `localhost` 改為 Mac 區網 IP（`ipconfig getifaddr en0`）。
+
+seed 變更後需重設：`make sandbox-reset`（清除 Docker volume + `server/fhirpass.db`）
 
 ## 中台資料庫
 SQLite（MVP），只存醫院路由表，**不存任何個資**。
 `server/app/models.py` → `HospitalRouting`（表名 `hospital_routing`）。
-首次啟動時自動建表，並 seed 一筆 `SMART_HEALTH_IT`（SMART Health IT 公用測試沙盒）。
+首次啟動時自動建表，並 seed 一筆 `DEV_SANDBOX`（本地開發沙盒）。
 
 ## 開發環境
 - Python: 3.11+，使用 venv

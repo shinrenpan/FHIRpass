@@ -1,0 +1,24 @@
+services:
+  hapi:
+    image: hapiproject/hapi:latest
+    ports:
+      - "9090:8080"
+    volumes:
+      - ./hapi/application.yaml:/app/config/application.yaml
+      - hapi-data:/data/hapi
+    environment:
+      spring.config.location: file:///app/config/application.yaml
+
+  launcher:
+    image: smartonfhir/smart-launcher-2:latest
+    ports:
+      - "9091:80"
+    environment:
+      NODE_ENV: production
+      FHIR_SERVER_R4: http://hapi:8080/fhir
+    depends_on:
+      - hapi
+    restart: on-failure
+
+volumes:
+  hapi-data:

@@ -1,0 +1,13 @@
+spring:
+  main:
+    allow-circular-references: true
+
+hapi:
+  fhir:
+    fhir_version: R4
+    implementationguides:
+      twcore:
+        name: tw.gov.mohw.twcore
+        version: 1.0.0
+        reloadExisting: false
+        installMode: STORE_AND_INSTALL

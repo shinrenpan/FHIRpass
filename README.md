@@ -165,8 +165,8 @@ INSERT INTO hospital_routing (fhir_id, hospital_name, fhir_base_url, smart_well_
 VALUES (
   'DEV_SANDBOX',
   '本地開發沙盒',
-  'http://localhost:9090/fhir',
-  'http://localhost:9090/fhir/.well-known/smart-configuration'
+  'http://localhost:9091/v/r4/fhir',
+  'http://localhost:9091/v/r4/fhir/.well-known/smart-configuration'
 );
 ```
 
