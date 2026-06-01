@@ -61,8 +61,15 @@ private extension HospitalDetailView {
       }
 
     case .connected:
-      Label("已完成授權", systemImage: "checkmark.seal.fill")
-        .foregroundStyle(.green)
+      HStack {
+        Label("已完成授權", systemImage: "checkmark.seal.fill")
+          .foregroundStyle(.green)
+        Spacer()
+        Button("中斷連結", role: .destructive) {
+          Task { await viewModel.doAction(.view(.disconnectTap)) }
+        }
+        .font(.caption)
+      }
 
     case let .error(message):
       VStack(alignment: .leading, spacing: 4) {

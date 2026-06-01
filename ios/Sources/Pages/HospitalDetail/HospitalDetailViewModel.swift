@@ -36,6 +36,7 @@ extension HospitalDetailViewModel {
   enum ViewAction: Sendable {
     case isFirstAppear
     case connectTap
+    case disconnectTap
     case authResult(Result<SMARTTokenResponse, Error>)
     case makeAppointmentTap
     case syncHealthRecordsTap
@@ -50,6 +51,12 @@ extension HospitalDetailViewModel {
 
     case .connectTap:
       await startSMARTAuth()
+
+    case .disconnectTap:
+      KeychainService.delete(key: state.hospital.keychainKey)
+      KeychainService.delete(key: state.hospital.keychainKey + ".patient")
+      state.authStatus = .notConnected
+      state.api = .init()
 
     case let .authResult(.success(tokenResponse)):
       KeychainService.save(key: state.hospital.keychainKey, value: tokenResponse.access_token)

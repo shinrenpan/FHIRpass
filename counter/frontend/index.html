@@ -56,57 +56,34 @@
     }
 
     /* 掃碼區 */
-    #reader {
-      width: 100%;
-      border-radius: 8px;
-      overflow: hidden;
-      background: #000;
-      min-height: 280px;
-    }
-
+    #reader { width: 100%; border-radius: 8px; overflow: hidden; background: #000; min-height: 280px; }
     #reader video { border-radius: 8px; }
 
     .scan-status {
-      margin-top: 12px;
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      text-align: center;
+      margin-top: 12px; padding: 10px 14px; border-radius: 8px;
+      font-size: 0.9rem; font-weight: 500; text-align: center;
     }
     .scan-status.idle     { background: #f3f4f6; color: #6b7280; }
     .scan-status.scanning { background: #eff6ff; color: #1d4ed8; }
     .scan-status.success  { background: #f0fdf4; color: #15803d; }
     .scan-status.error    { background: #fef2f2; color: #dc2626; }
+    .scan-status.loading  { background: #fefce8; color: #92400e; }
 
     .stop-btn {
-      width: 100%;
-      margin-top: 10px;
-      padding: 10px;
-      border: 1px solid #d1d5db;
-      border-radius: 8px;
-      background: white;
-      color: #6b7280;
-      font-size: 0.9rem;
-      cursor: pointer;
-      display: none;
-      transition: background 0.15s;
+      width: 100%; margin-top: 10px; padding: 10px;
+      border: 1px solid #d1d5db; border-radius: 8px; background: white;
+      color: #6b7280; font-size: 0.9rem; cursor: pointer; display: none;
     }
     .stop-btn:hover { background: #fee2e2; color: #dc2626; border-color: #fca5a5; }
     .stop-btn.visible { display: block; }
 
     /* 結果區 */
-    #result-panel { display: flex; flex-direction: column; gap: 16px; }
+    #result-panel { display: flex; flex-direction: column; gap: 12px; }
 
     .result-empty {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: #9ca3af;
-      gap: 8px;
-      padding: 40px 0;
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      color: #9ca3af; gap: 8px; padding: 40px 0;
     }
     .result-empty svg { opacity: 0.4; }
 
@@ -114,99 +91,86 @@
     .patient-card.visible { display: block; }
 
     .patient-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid #f3f4f6;
-      margin-bottom: 16px;
+      display: flex; align-items: center; gap: 12px;
+      padding-bottom: 12px; border-bottom: 1px solid #f3f4f6; margin-bottom: 12px;
     }
-
     .patient-avatar {
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      background: #dbeafe;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      color: #1d4ed8;
+      width: 48px; height: 48px; border-radius: 50%;
+      background: #dbeafe; display: flex; align-items: center;
+      justify-content: center; font-size: 1.3rem; color: #1d4ed8;
+      flex-shrink: 0;
     }
-
-    .patient-name { font-size: 1.4rem; font-weight: 700; color: #111827; }
-    .patient-id   { font-size: 0.85rem; color: #6b7280; margin-top: 2px; }
-
-    .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
-    .field { background: #f9fafb; border-radius: 8px; padding: 12px; }
-    .field-label { font-size: 0.75rem; color: #9ca3af; margin-bottom: 4px; }
-    .field-value { font-size: 0.95rem; font-weight: 500; color: #111827; }
-
-    .fhir-block {
-      background: #0f172a;
-      border-radius: 8px;
-      padding: 14px;
-      overflow-x: auto;
+    .patient-name { font-size: 1.3rem; font-weight: 700; color: #111827; }
+    .patient-meta { display: flex; align-items: center; gap: 8px; margin-top: 3px; }
+    .patient-id   { font-size: 0.85rem; color: #6b7280; }
+    .badge {
+      font-size: 0.7rem; font-weight: 600; padding: 2px 8px;
+      border-radius: 20px; flex-shrink: 0;
     }
-    .fhir-block pre {
-      font-family: "SF Mono", "Fira Code", monospace;
-      font-size: 0.75rem;
-      color: #94a3b8;
-      white-space: pre-wrap;
-      word-break: break-all;
-    }
-    .fhir-block pre .key   { color: #7dd3fc; }
-    .fhir-block pre .str   { color: #86efac; }
-    .fhir-block pre .other { color: #fbbf24; }
+    .badge.existing { background: #dbeafe; color: #1d4ed8; }
+    .badge.new      { background: #dcfce7; color: #15803d; }
 
-    .confirm-btn {
-      width: 100%;
-      padding: 14px;
-      border: none;
-      border-radius: 10px;
-      background: #16a34a;
-      color: white;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.15s;
+    .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .field { background: #f9fafb; border-radius: 8px; padding: 10px; }
+    .field-label { font-size: 0.72rem; color: #9ca3af; margin-bottom: 3px; }
+    .field-value { font-size: 0.9rem; font-weight: 500; color: #111827; }
+
+    .fhir-id-bar {
+      background: #f0f9ff; border: 1px solid #bae6fd;
+      border-radius: 8px; padding: 8px 12px;
+      font-size: 0.8rem; color: #0369a1;
       display: none;
     }
-    .confirm-btn:hover { background: #15803d; }
-    .confirm-btn.visible { display: block; }
+    .fhir-id-bar.visible { display: block; }
 
-    .rescan-btn {
-      width: 100%;
-      padding: 12px;
-      margin-top: 8px;
-      border: 1px solid #d1d5db;
-      border-radius: 10px;
-      background: white;
-      color: #374151;
-      font-size: 0.95rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.15s;
-      display: none;
+    /* 預約區塊 */
+    .appt-section { display: none; }
+    .appt-section.visible { display: block; }
+    .appt-section h3 {
+      font-size: 0.85rem; font-weight: 600; color: #374151;
+      margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
     }
-    .rescan-btn:hover { background: #f3f4f6; }
-    .rescan-btn.visible { display: block; }
+    .appt-list { display: flex; flex-direction: column; gap: 6px; }
+    .appt-item {
+      background: #f9fafb; border-radius: 8px; padding: 10px 12px;
+      font-size: 0.85rem;
+    }
+    .appt-status {
+      display: inline-block; font-size: 0.7rem; font-weight: 600;
+      padding: 2px 7px; border-radius: 10px; margin-right: 6px;
+    }
+    .appt-status.booked    { background: #dbeafe; color: #1d4ed8; }
+    .appt-status.fulfilled { background: #dcfce7; color: #15803d; }
+    .appt-status.cancelled { background: #fee2e2; color: #dc2626; }
+    .appt-status.pending   { background: #fefce8; color: #92400e; }
+    .appt-empty {
+      font-size: 0.85rem; color: #9ca3af; text-align: center; padding: 12px 0;
+    }
 
-    .confirmed-msg {
-      text-align: center;
-      padding: 14px;
-      background: #f0fdf4;
-      border-radius: 10px;
-      color: #15803d;
-      font-weight: 600;
-      display: none;
+    /* 按鈕 */
+    .action-row { display: flex; flex-direction: column; gap: 8px; }
+    .btn {
+      width: 100%; padding: 12px; border: none; border-radius: 10px;
+      font-size: 0.95rem; font-weight: 600; cursor: pointer;
+      transition: background 0.15s; display: none;
     }
-    .confirmed-msg.visible { display: block; }
+    .btn.visible { display: block; }
+    .btn-primary { background: #16a34a; color: white; }
+    .btn-primary:hover { background: #15803d; }
+    .btn-primary:disabled { background: #9ca3af; cursor: not-allowed; }
+    .btn-secondary {
+      background: white; color: #374151;
+      border: 1px solid #d1d5db; font-weight: 500;
+    }
+    .btn-secondary:hover { background: #f3f4f6; }
 
-    @media (max-width: 768px) {
-      main { grid-template-columns: 1fr; }
+    .error-msg {
+      font-size: 0.85rem; color: #dc2626; background: #fef2f2;
+      border-radius: 8px; padding: 10px 12px; display: none;
     }
+    .error-msg.visible { display: block; }
+
+    @media (max-width: 768px) { main { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -218,7 +182,7 @@
   </svg>
   <div>
     <h1>FHIRpass 櫃檯掃碼系統</h1>
-    <span>初診建檔模擬 · 軌道三</span>
+    <span>初診建檔 · 病患查詢 · 軌道三</span>
   </div>
 </header>
 
@@ -234,12 +198,10 @@
     </h2>
     <div id="reader"></div>
     <div id="scan-status" class="scan-status idle">點擊上方啟動相機</div>
-    <button class="stop-btn" id="stop-btn" onclick="stopCamera()">
-      ■ 關閉相機
-    </button>
+    <button class="stop-btn" id="stop-btn" onclick="stopCamera()">■ 關閉相機</button>
   </div>
 
-  <!-- 右欄：建檔結果 -->
+  <!-- 右欄：結果 -->
   <div class="card" id="result-panel">
     <h2>
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1a56db" stroke-width="2">
@@ -247,7 +209,7 @@
         <circle cx="9" cy="7" r="4"/>
         <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
       </svg>
-      病患建檔預覽
+      病患資料
     </h2>
 
     <div class="result-empty" id="empty-hint">
@@ -258,12 +220,16 @@
       <span>等待掃描病患 QR Code</span>
     </div>
 
+    <!-- 病患資訊卡 -->
     <div class="patient-card" id="patient-card">
       <div class="patient-header">
         <div class="patient-avatar">👤</div>
         <div>
           <div class="patient-name" id="p-name">—</div>
-          <div class="patient-id" id="p-id">—</div>
+          <div class="patient-meta">
+            <span class="patient-id" id="p-id">—</span>
+            <span class="badge" id="p-badge"></span>
+          </div>
         </div>
       </div>
 
@@ -282,48 +248,52 @@
         </div>
       </div>
 
-      <div style="margin-top:16px">
-        <div class="field-label" style="margin-bottom:8px; color:#374151; font-size:0.8rem; font-weight:600;">
-          TW Core IG Patient JSON
-        </div>
-        <div class="fhir-block">
-          <pre id="fhir-json"></pre>
-        </div>
-      </div>
+      <div class="fhir-id-bar" id="fhir-id-bar"></div>
     </div>
 
-    <button class="confirm-btn" id="confirm-btn" onclick="confirmAdmit()">
-      ✓ 確認寫入建檔
-    </button>
-    <button class="rescan-btn" id="rescan-btn" onclick="rescan()">
-      重新掃描
-    </button>
-    <div class="confirmed-msg" id="confirmed-msg">
-      ✅ 初診建檔完成！請引導病患至候診區。
+    <!-- 預約記錄 -->
+    <div class="appt-section" id="appt-section">
+      <h3>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+          <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+          <line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+        預約記錄
+      </h3>
+      <div class="appt-list" id="appt-list"></div>
+    </div>
+
+    <!-- 錯誤訊息 -->
+    <div class="error-msg" id="error-msg"></div>
+
+    <!-- 操作按鈕 -->
+    <div class="action-row">
+      <button class="btn btn-primary" id="confirm-btn" onclick="confirmAdmit()">✓ 確認建檔</button>
+      <button class="btn btn-secondary" id="rescan-btn" onclick="rescan()">重新掃描</button>
     </div>
   </div>
 </main>
 
 <script>
-  // ── 設定 ──────────────────────────────────────────────
-  // frontend 由 backend 同源提供，直接用 origin 即可
   const BACKEND = window.location.origin;
 
-  // ── 狀態 ──────────────────────────────────────────────
   let scanner = null;
   let isScanning = false;
   let lastPayload = "";
-  let currentPatient = null;  // 暫存 /scan 回傳的 patient JSON，供 /register 使用
+  let currentPatient = null;   // TW Core IG Patient JSON（待建檔）
+  let currentFhirId = null;    // 已建檔的 FHIR ID
 
-  // ── 啟動掃碼 ──────────────────────────────────────────
+  // ── 掃碼 ───────────────────────────────────────────────
+
   async function startScanner() {
     if (isScanning) return;
-    lastPayload = "";  // 每次重新開啟相機都重置，避免擋掉相同 QR Code
-    document.getElementById("reader").innerHTML = "";  // 清除舊 DOM
+    lastPayload = "";
+    document.getElementById("reader").innerHTML = "";
     scanner = new Html5Qrcode("reader");
     isScanning = true;
     setStatus("scanning", "掃碼中，請將 QR Code 對準鏡頭…");
-    setStopBtnVisible(true);
+    showBtn("stop-btn", true);
 
     try {
       await scanner.start(
@@ -334,7 +304,7 @@
       );
     } catch (err) {
       setStatus("error", "無法啟動相機：" + err);
-      setStopBtnVisible(false);
+      showBtn("stop-btn", false);
       isScanning = false;
     }
   }
@@ -344,7 +314,7 @@
       await scanner.stop();
       isScanning = false;
       scanner = null;
-      setStopBtnVisible(false);
+      showBtn("stop-btn", false);
     }
   }
 
@@ -353,130 +323,210 @@
     setStatus("idle", "點擊上方相機區域啟動掃描");
   }
 
-  // ── 掃到後處理 ────────────────────────────────────────
+  // ── 掃到後處理：decode → 查詢是否已存在 ───────────────
+
   async function onScanSuccess(payload) {
     if (payload === lastPayload) return;
     lastPayload = payload;
 
-    setStatus("success", "掃描成功，解析中…");
-    await stopScanner();  // 關閉相機
+    setStatus("loading", "解析中…");
+    await stopScanner();
 
+    // Step 1: decode QR
+    let scanData;
     try {
-      const res = await fetch(`${BACKEND}/scan`, {
+      const r = await fetch(`${BACKEND}/scan`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ payload }),
       });
-
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.detail ?? "解碼失敗");
-      }
-
-      const data = await res.json();
-      currentPatient = data.patient;
-      showPatient(data);
-      setStatus("success", "✅ 解析完成，請確認資料無誤");
+      if (!r.ok) throw new Error((await r.json()).detail ?? "解碼失敗");
+      scanData = await r.json();
     } catch (e) {
       setStatus("error", "❌ " + e.message);
       lastPayload = "";
-      startScanner();  // 解碼失敗則重啟相機繼續掃
+      startScanner();
+      return;
+    }
+
+    showPatientCard(scanData.raw, null, null);
+    setStatus("loading", "查詢病患資料中…");
+
+    // Step 2: 查詢是否已存在
+    try {
+      const r = await fetch(`${BACKEND}/patients/search?identifier=${scanData.raw.id_number}`);
+      if (r.status === 404) {
+        // 新病患
+        currentPatient = scanData.patient;
+        currentFhirId = null;
+        showPatientCard(scanData.raw, null, false);
+        showBtn("confirm-btn", true);
+        showBtn("rescan-btn", true);
+        setStatus("success", "✅ 新病患，請確認資料後建檔");
+      } else if (r.ok) {
+        // 既有病患
+        const found = await r.json();
+        currentPatient = null;
+        currentFhirId = found.fhir_id;
+        showPatientCard(scanData.raw, found.fhir_id, true);
+        showBtn("confirm-btn", false);
+        showBtn("rescan-btn", true);
+        setStatus("success", "✅ 找到既有病患");
+        await loadAppointments(found.fhir_id);
+      } else {
+        throw new Error("查詢失敗");
+      }
+    } catch (e) {
+      showError("查詢時發生錯誤：" + e.message);
+      showBtn("rescan-btn", true);
     }
   }
 
-  // ── 渲染病患資料 ──────────────────────────────────────
-  function showPatient(data) {
-    const raw = data.raw;
+  // ── 渲染病患卡片 ────────────────────────────────────────
+
+  function showPatientCard(raw, fhirId, isExisting) {
     document.getElementById("empty-hint").style.display = "none";
     document.getElementById("p-name").textContent = raw.name;
     document.getElementById("p-id").textContent = raw.id_number;
     document.getElementById("p-birthday").textContent = raw.birthday;
     document.getElementById("p-gender").textContent = raw.gender;
     document.getElementById("p-phone").textContent = raw.phone;
-    document.getElementById("fhir-json").innerHTML = syntaxHighlight(data.patient);
+
+    const badge = document.getElementById("p-badge");
+    if (isExisting === true) {
+      badge.textContent = "既有病患"; badge.className = "badge existing";
+    } else if (isExisting === false) {
+      badge.textContent = "新病患"; badge.className = "badge new";
+    } else {
+      badge.textContent = ""; badge.className = "badge";
+    }
+
+    const fhirBar = document.getElementById("fhir-id-bar");
+    if (fhirId) {
+      fhirBar.textContent = `FHIR Patient ID：${fhirId}`;
+      fhirBar.classList.add("visible");
+    } else {
+      fhirBar.classList.remove("visible");
+    }
+
     document.getElementById("patient-card").classList.add("visible");
-    document.getElementById("confirm-btn").classList.add("visible");
-    document.getElementById("rescan-btn").classList.add("visible");
-    document.getElementById("confirmed-msg").classList.remove("visible");
+    document.getElementById("appt-section").classList.remove("visible");
+    document.getElementById("error-msg").classList.remove("visible");
   }
 
-  // ── 確認寫入（POST 至 HAPI FHIR）──────────────────────
-  async function confirmAdmit() {
-    document.getElementById("confirm-btn").classList.remove("visible");
-    document.getElementById("rescan-btn").classList.remove("visible");
-    setStatus("scanning", "寫入 FHIR Server 中…");
+  // ── 載入預約記錄 ────────────────────────────────────────
+
+  async function loadAppointments(fhirId) {
+    const section = document.getElementById("appt-section");
+    const list = document.getElementById("appt-list");
+    section.classList.add("visible");
+    list.innerHTML = "<div class='appt-empty'>載入中…</div>";
 
     try {
-      const res = await fetch(`${BACKEND}/register`, {
+      const r = await fetch(`${BACKEND}/patients/${fhirId}/appointments`);
+      const data = await r.json();
+      if (!data.appointments.length) {
+        list.innerHTML = "<div class='appt-empty'>尚無預約記錄</div>";
+        return;
+      }
+      list.innerHTML = data.appointments.map(a => {
+        const statusCls = a.status || "pending";
+        const statusText = { booked: "已預約", fulfilled: "已就診", cancelled: "已取消", pending: "待確認" }[a.status] ?? a.status;
+        const dateStr = a.start ? new Date(a.start).toLocaleString("zh-TW", { month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }) : "—";
+        return `<div class="appt-item">
+          <span class="appt-status ${statusCls}">${statusText}</span>
+          ${dateStr}${a.description ? "　" + a.description : ""}
+        </div>`;
+      }).join("");
+    } catch {
+      list.innerHTML = "<div class='appt-empty'>預約資料載入失敗</div>";
+    }
+  }
+
+  // ── 確認建檔 ────────────────────────────────────────────
+
+  async function confirmAdmit() {
+    const btn = document.getElementById("confirm-btn");
+    btn.disabled = true;
+    btn.textContent = "建檔中…";
+    showError(null);
+    setStatus("loading", "寫入 FHIR Server 中…");
+
+    try {
+      const r = await fetch(`${BACKEND}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(currentPatient),
       });
+      if (!r.ok) throw new Error((await r.json()).detail ?? "寫入失敗");
 
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.detail ?? "寫入失敗");
-      }
-
-      const result = await res.json();
-      const msg = document.getElementById("confirmed-msg");
-      msg.textContent = `✅ 建檔完成！FHIR Patient ID：${result.fhir_id}`;
-      msg.classList.add("visible");
-      setStatus("success", "建檔完成。可繼續掃下一位病患。");
+      const result = await r.json();
+      currentFhirId = result.fhir_id;
+      const raw = extractRaw();
+      showPatientCard(raw, result.fhir_id, false);
+      showBtn("confirm-btn", false);
+      setStatus("success", "✅ 建檔完成！可繼續掃下一位病患。");
+      await loadAppointments(result.fhir_id);
     } catch (e) {
-      setStatus("error", "❌ " + e.message);
-      document.getElementById("confirm-btn").classList.add("visible");
-      document.getElementById("rescan-btn").classList.add("visible");
-      return;
+      showError("建檔失敗：" + e.message);
+      btn.disabled = false;
+      btn.textContent = "✓ 確認建檔";
+      setStatus("error", "❌ 建檔失敗");
     }
-
-    await delay(4000);
-    resetForNext();
   }
 
-  // ── 重新掃描（取消目前病患）──────────────────────────
-  function rescan() {
-    resetForNext();
+  function extractRaw() {
+    return {
+      name: document.getElementById("p-name").textContent,
+      id_number: document.getElementById("p-id").textContent,
+      birthday: document.getElementById("p-birthday").textContent,
+      gender: document.getElementById("p-gender").textContent,
+      phone: document.getElementById("p-phone").textContent,
+    };
   }
 
-  function resetForNext() {
+  // ── 重新掃描 ────────────────────────────────────────────
+
+  function rescan() { resetAndScan(); }
+
+  function resetAndScan() {
     lastPayload = "";
+    currentPatient = null;
+    currentFhirId = null;
     document.getElementById("patient-card").classList.remove("visible");
-    document.getElementById("confirm-btn").classList.remove("visible");
-    document.getElementById("rescan-btn").classList.remove("visible");
-    document.getElementById("confirmed-msg").classList.remove("visible");
+    document.getElementById("appt-section").classList.remove("visible");
+    document.getElementById("fhir-id-bar").classList.remove("visible");
+    document.getElementById("error-msg").classList.remove("visible");
     document.getElementById("empty-hint").style.display = "";
+    showBtn("confirm-btn", false);
+    showBtn("rescan-btn", false);
+    const btn = document.getElementById("confirm-btn");
+    btn.disabled = false;
+    btn.textContent = "✓ 確認建檔";
     startScanner();
   }
 
-  // ── 工具 ──────────────────────────────────────────────
+  // ── 工具 ────────────────────────────────────────────────
+
   function setStatus(type, msg) {
     const el = document.getElementById("scan-status");
     el.className = "scan-status " + type;
     el.textContent = msg;
   }
 
-  function setStopBtnVisible(visible) {
-    document.getElementById("stop-btn").classList.toggle("visible", visible);
+  function showBtn(id, visible) {
+    document.getElementById(id).classList.toggle("visible", visible);
   }
 
-  function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
-
-  function syntaxHighlight(obj) {
-    return JSON.stringify(obj, null, 2)
-      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-      .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, match => {
-        if (/^"/.test(match)) {
-          return /:$/.test(match)
-            ? `<span class="key">${match}</span>`
-            : `<span class="str">${match}</span>`;
-        }
-        return `<span class="other">${match}</span>`;
-      });
+  function showError(msg) {
+    const el = document.getElementById("error-msg");
+    if (msg) { el.textContent = msg; el.classList.add("visible"); }
+    else { el.classList.remove("visible"); }
   }
 
-  // ── 頁面載入後啟動 ────────────────────────────────────
-  document.getElementById("reader").addEventListener("click", resetForNext);
+  // ── 啟動 ────────────────────────────────────────────────
+
+  document.getElementById("reader").addEventListener("click", resetAndScan);
   setStatus("idle", "點擊上方相機區域啟動掃描");
 </script>
 
