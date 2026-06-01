@@ -1,0 +1,529 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		038A72120CA431ADBA2E5E2A /* HospitalListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9902E1CA2C0D9703B2CDEA0 /* HospitalListView.swift */; };
+		038C9B5F0A4FB62A6970878B /* ProfileHostController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F5354445306942C5B756EA /* ProfileHostController.swift */; };
+		073881E70C18807153B45671 /* HospitalListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 916A669F1B7F669A5A5844D9 /* HospitalListViewModel.swift */; };
+		08DB494039594F8AF14FFD44 /* HospitalDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A193379343949AD5837089 /* HospitalDetailViewModel.swift */; };
+		0F35D2834A911850F56C8D22 /* QRCodeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7873B2CAB6F6B4BBBCC973B /* QRCodeViewModel.swift */; };
+		11478F9E2ABD7BB541F16335 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3AAE8055BB20980A6EF15B /* AppRouter.swift */; };
+		2AAB089CD6DC51C12CC4011E /* HospitalDetailViewModel+Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23803A92972D341F88E26109 /* HospitalDetailViewModel+Models.swift */; };
+		333AB19ABBBBD614A1897277 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52392CFE7D34E8C8666CF87 /* ProfileView.swift */; };
+		335FFACA2340CE9DF3FB586C /* HospitalDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED29A5D1FE5DC5A48501438 /* HospitalDetailView.swift */; };
+		3FC064869A88B16818F77D42 /* HospitalListViewModel+APIs.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0EA5E2214F0B82A147E27E0 /* HospitalListViewModel+APIs.swift */; };
+		8BCEBC2174E50CC00E72FBA4 /* ProfileViewModel+Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECC818AE4987405325E3F0 /* ProfileViewModel+Models.swift */; };
+		90A1E97E503543CBDE900924 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9619CCC55E71FFD4CC982F /* SceneDelegate.swift */; };
+		925C5530442364E09EAF8FFE /* QRCodeHostController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57EF935B98D62260611EEEB /* QRCodeHostController.swift */; };
+		AF9D3723AF7D14F338D95E72 /* QRCodeViewModel+Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB2E8B28C632B5A0403364B /* QRCodeViewModel+Models.swift */; };
+		B6E3F333D82C5DDE9BC54533 /* Deeplink.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC29BF72003BC875EA262B98 /* Deeplink.swift */; };
+		C10B5DDAA3F7AA5247FA0644 /* HospitalListViewModel+Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89057A29D63A620F6425D263 /* HospitalListViewModel+Models.swift */; };
+		C6803BA958A04173D842D29C /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDDF8E1AFCB7B456262FEB5E /* ProfileViewModel.swift */; };
+		C73EB4AC40D85762B7B5EB84 /* QRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21CE730849E46B2417F79534 /* QRCodeView.swift */; };
+		CADB7BCF5BC8192BB19966CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1FB485B870A29BC5D0132F /* AppDelegate.swift */; };
+		CD483D7C5776AD166E21AF4B /* PatientProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFE93315C423A625E2FA077 /* PatientProfile.swift */; };
+		D1878B7CD629BBCE8D25AABF /* HospitalDetailHostController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB5A4466F0014EDBC552F76 /* HospitalDetailHostController.swift */; };
+		FA3D4FBFFB846C7184AF86CE /* HospitalListHostController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B353A990F415CF14010AD8AD /* HospitalListHostController.swift */; };
+		FEEC38282E2A0934744EA64F /* APIStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DEF417264F9354D7EB1755 /* APIStatus.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		16CBEF74FFF64747224A716C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 472C94B1F4E6D89BF5372EF5 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9822A38CB40720A640D15CFD;
+			remoteInfo = FHIRpass;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		00A193379343949AD5837089 /* HospitalDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HospitalDetailViewModel.swift; sourceTree = "<group>"; };
+		0DB2E8B28C632B5A0403364B /* QRCodeViewModel+Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QRCodeViewModel+Models.swift"; sourceTree = "<group>"; };
+		21CE730849E46B2417F79534 /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
+		23803A92972D341F88E26109 /* HospitalDetailViewModel+Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HospitalDetailViewModel+Models.swift"; sourceTree = "<group>"; };
+		3939D5C93D9E67FD83E10321 /* FHIRpassTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = FHIRpassTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3F3AAE8055BB20980A6EF15B /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
+		4ED29A5D1FE5DC5A48501438 /* HospitalDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HospitalDetailView.swift; sourceTree = "<group>"; };
+		61DEF417264F9354D7EB1755 /* APIStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIStatus.swift; sourceTree = "<group>"; };
+		69F5354445306942C5B756EA /* ProfileHostController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHostController.swift; sourceTree = "<group>"; };
+		89057A29D63A620F6425D263 /* HospitalListViewModel+Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HospitalListViewModel+Models.swift"; sourceTree = "<group>"; };
+		916A669F1B7F669A5A5844D9 /* HospitalListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HospitalListViewModel.swift; sourceTree = "<group>"; };
+		9925D7D1B7B7244FCB4D9104 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		99ECC818AE4987405325E3F0 /* ProfileViewModel+Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileViewModel+Models.swift"; sourceTree = "<group>"; };
+		ACFE93315C423A625E2FA077 /* PatientProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientProfile.swift; sourceTree = "<group>"; };
+		AE9619CCC55E71FFD4CC982F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		B353A990F415CF14010AD8AD /* HospitalListHostController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HospitalListHostController.swift; sourceTree = "<group>"; };
+		B57EF935B98D62260611EEEB /* QRCodeHostController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeHostController.swift; sourceTree = "<group>"; };
+		B9902E1CA2C0D9703B2CDEA0 /* HospitalListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HospitalListView.swift; sourceTree = "<group>"; };
+		C52392CFE7D34E8C8666CF87 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		CDB5A4466F0014EDBC552F76 /* HospitalDetailHostController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HospitalDetailHostController.swift; sourceTree = "<group>"; };
+		CDDF8E1AFCB7B456262FEB5E /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		D0EA5E2214F0B82A147E27E0 /* HospitalListViewModel+APIs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HospitalListViewModel+APIs.swift"; sourceTree = "<group>"; };
+		E04C931D21D3471BBBE854D1 /* FHIRpass.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = FHIRpass.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E61064B21705526E6139D613 /* .gitkeep */ = {isa = PBXFileReference; path = .gitkeep; sourceTree = "<group>"; };
+		EC29BF72003BC875EA262B98 /* Deeplink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deeplink.swift; sourceTree = "<group>"; };
+		F7873B2CAB6F6B4BBBCC973B /* QRCodeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeViewModel.swift; sourceTree = "<group>"; };
+		FF1FB485B870A29BC5D0132F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		03040A0E3D51097077BE4B0F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E04C931D21D3471BBBE854D1 /* FHIRpass.app */,
+				3939D5C93D9E67FD83E10321 /* FHIRpassTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		095FA23183B3DFCA27345BB2 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				E61064B21705526E6139D613 /* .gitkeep */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		4C8C6B395929070DDB0F70F3 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				FF1FB485B870A29BC5D0132F /* AppDelegate.swift */,
+				3F3AAE8055BB20980A6EF15B /* AppRouter.swift */,
+				EC29BF72003BC875EA262B98 /* Deeplink.swift */,
+				9925D7D1B7B7244FCB4D9104 /* Info.plist */,
+				AE9619CCC55E71FFD4CC982F /* SceneDelegate.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		577258A83CD352475F8437D5 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				69F5354445306942C5B756EA /* ProfileHostController.swift */,
+				C52392CFE7D34E8C8666CF87 /* ProfileView.swift */,
+				CDDF8E1AFCB7B456262FEB5E /* ProfileViewModel.swift */,
+				99ECC818AE4987405325E3F0 /* ProfileViewModel+Models.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		59F67246B9DF615B070602F3 /* QRCode */ = {
+			isa = PBXGroup;
+			children = (
+				B57EF935B98D62260611EEEB /* QRCodeHostController.swift */,
+				21CE730849E46B2417F79534 /* QRCodeView.swift */,
+				F7873B2CAB6F6B4BBBCC973B /* QRCodeViewModel.swift */,
+				0DB2E8B28C632B5A0403364B /* QRCodeViewModel+Models.swift */,
+			);
+			path = QRCode;
+			sourceTree = "<group>";
+		};
+		7986CDD1A2CBF992D04DEE58 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				4C8C6B395929070DDB0F70F3 /* App */,
+				EA692931F1F4E0309E8D980A /* Pages */,
+				A1F95918BF4F607DF169AA0F /* Shared */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		A1F95918BF4F607DF169AA0F /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				61DEF417264F9354D7EB1755 /* APIStatus.swift */,
+				ACFE93315C423A625E2FA077 /* PatientProfile.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		C464D813ED723AB6DF0A27E2 = {
+			isa = PBXGroup;
+			children = (
+				7986CDD1A2CBF992D04DEE58 /* Sources */,
+				095FA23183B3DFCA27345BB2 /* Tests */,
+				03040A0E3D51097077BE4B0F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D843ED08EEF49F51805E5A44 /* HospitalDetail */ = {
+			isa = PBXGroup;
+			children = (
+				CDB5A4466F0014EDBC552F76 /* HospitalDetailHostController.swift */,
+				4ED29A5D1FE5DC5A48501438 /* HospitalDetailView.swift */,
+				00A193379343949AD5837089 /* HospitalDetailViewModel.swift */,
+				23803A92972D341F88E26109 /* HospitalDetailViewModel+Models.swift */,
+			);
+			path = HospitalDetail;
+			sourceTree = "<group>";
+		};
+		EA692931F1F4E0309E8D980A /* Pages */ = {
+			isa = PBXGroup;
+			children = (
+				D843ED08EEF49F51805E5A44 /* HospitalDetail */,
+				ED2320406E5E6CF95B0DBD2D /* HospitalList */,
+				577258A83CD352475F8437D5 /* Profile */,
+				59F67246B9DF615B070602F3 /* QRCode */,
+			);
+			path = Pages;
+			sourceTree = "<group>";
+		};
+		ED2320406E5E6CF95B0DBD2D /* HospitalList */ = {
+			isa = PBXGroup;
+			children = (
+				B353A990F415CF14010AD8AD /* HospitalListHostController.swift */,
+				B9902E1CA2C0D9703B2CDEA0 /* HospitalListView.swift */,
+				916A669F1B7F669A5A5844D9 /* HospitalListViewModel.swift */,
+				D0EA5E2214F0B82A147E27E0 /* HospitalListViewModel+APIs.swift */,
+				89057A29D63A620F6425D263 /* HospitalListViewModel+Models.swift */,
+			);
+			path = HospitalList;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		9822A38CB40720A640D15CFD /* FHIRpass */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4656AF06B1FE5CEAC8869A1A /* Build configuration list for PBXNativeTarget "FHIRpass" */;
+			buildPhases = (
+				596A28D4C2380429158A43E1 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FHIRpass;
+			packageProductDependencies = (
+			);
+			productName = FHIRpass;
+			productReference = E04C931D21D3471BBBE854D1 /* FHIRpass.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D0301F0EA56BB232BF794643 /* FHIRpassTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 69B17782431DF692B7E76AEC /* Build configuration list for PBXNativeTarget "FHIRpassTests" */;
+			buildPhases = (
+				9CE41C0B5DB49F2945969D4B /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				16CAB4AD278DECD00876EAC4 /* PBXTargetDependency */,
+			);
+			name = FHIRpassTests;
+			packageProductDependencies = (
+			);
+			productName = FHIRpassTests;
+			productReference = 3939D5C93D9E67FD83E10321 /* FHIRpassTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		472C94B1F4E6D89BF5372EF5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = 55108E2BBAB703A1309AB4C8 /* Build configuration list for PBXProject "FHIRpass" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = C464D813ED723AB6DF0A27E2;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 03040A0E3D51097077BE4B0F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				9822A38CB40720A640D15CFD /* FHIRpass */,
+				D0301F0EA56BB232BF794643 /* FHIRpassTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		596A28D4C2380429158A43E1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FEEC38282E2A0934744EA64F /* APIStatus.swift in Sources */,
+				CADB7BCF5BC8192BB19966CA /* AppDelegate.swift in Sources */,
+				11478F9E2ABD7BB541F16335 /* AppRouter.swift in Sources */,
+				B6E3F333D82C5DDE9BC54533 /* Deeplink.swift in Sources */,
+				D1878B7CD629BBCE8D25AABF /* HospitalDetailHostController.swift in Sources */,
+				335FFACA2340CE9DF3FB586C /* HospitalDetailView.swift in Sources */,
+				2AAB089CD6DC51C12CC4011E /* HospitalDetailViewModel+Models.swift in Sources */,
+				08DB494039594F8AF14FFD44 /* HospitalDetailViewModel.swift in Sources */,
+				FA3D4FBFFB846C7184AF86CE /* HospitalListHostController.swift in Sources */,
+				038A72120CA431ADBA2E5E2A /* HospitalListView.swift in Sources */,
+				3FC064869A88B16818F77D42 /* HospitalListViewModel+APIs.swift in Sources */,
+				C10B5DDAA3F7AA5247FA0644 /* HospitalListViewModel+Models.swift in Sources */,
+				073881E70C18807153B45671 /* HospitalListViewModel.swift in Sources */,
+				CD483D7C5776AD166E21AF4B /* PatientProfile.swift in Sources */,
+				038C9B5F0A4FB62A6970878B /* ProfileHostController.swift in Sources */,
+				333AB19ABBBBD614A1897277 /* ProfileView.swift in Sources */,
+				8BCEBC2174E50CC00E72FBA4 /* ProfileViewModel+Models.swift in Sources */,
+				C6803BA958A04173D842D29C /* ProfileViewModel.swift in Sources */,
+				925C5530442364E09EAF8FFE /* QRCodeHostController.swift in Sources */,
+				C73EB4AC40D85762B7B5EB84 /* QRCodeView.swift in Sources */,
+				AF9D3723AF7D14F338D95E72 /* QRCodeViewModel+Models.swift in Sources */,
+				0F35D2834A911850F56C8D22 /* QRCodeViewModel.swift in Sources */,
+				90A1E97E503543CBDE900924 /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9CE41C0B5DB49F2945969D4B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		16CAB4AD278DECD00876EAC4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9822A38CB40720A640D15CFD /* FHIRpass */;
+			targetProxy = 16CBEF74FFF64747224A716C /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1DCA5F46AC0E5D1AEEEA76FD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Sources/App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.joe.fhirpass;
+				SDKROOT = iphoneos;
+				SWIFT_STRICT_CONCURRENCY = targeted;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		63925D50AF2DAF30F72CBFB7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.joe.fhirpass.FHIRpassTests;
+				SDKROOT = iphoneos;
+				SWIFT_STRICT_CONCURRENCY = targeted;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FHIRpass.app/FHIRpass";
+			};
+			name = Release;
+		};
+		BC70D9CB112CC1639FB62F8E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = Sources/App/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.joe.fhirpass;
+				SDKROOT = iphoneos;
+				SWIFT_STRICT_CONCURRENCY = targeted;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		D22740972BA681D2E83C257D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.joe.fhirpass.FHIRpassTests;
+				SDKROOT = iphoneos;
+				SWIFT_STRICT_CONCURRENCY = targeted;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FHIRpass.app/FHIRpass";
+			};
+			name = Debug;
+		};
+		DB4FA8996BB3F898365A64BE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		F2FE4FE5797D5921186FBCFF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4656AF06B1FE5CEAC8869A1A /* Build configuration list for PBXNativeTarget "FHIRpass" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DCA5F46AC0E5D1AEEEA76FD /* Debug */,
+				BC70D9CB112CC1639FB62F8E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		55108E2BBAB703A1309AB4C8 /* Build configuration list for PBXProject "FHIRpass" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DB4FA8996BB3F898365A64BE /* Debug */,
+				F2FE4FE5797D5921186FBCFF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		69B17782431DF692B7E76AEC /* Build configuration list for PBXNativeTarget "FHIRpassTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D22740972BA681D2E83C257D /* Debug */,
+				63925D50AF2DAF30F72CBFB7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 472C94B1F4E6D89BF5372EF5 /* Project object */;
+}

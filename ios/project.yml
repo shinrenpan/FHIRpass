@@ -1,0 +1,44 @@
+name: FHIRpass
+options:
+  bundleIdPrefix: com.joe.fhirpass
+  deploymentTarget:
+    iOS: "17.0"
+
+targets:
+  FHIRpass:
+    type: application
+    platform: iOS
+    sources:
+      - Sources
+    info:
+      path: Sources/App/Info.plist
+      properties:
+        UILaunchScreen: {}
+        CFBundleURLTypes:
+          - CFBundleURLName: com.joe.fhirpass
+            CFBundleURLSchemes:
+              - fhirpass
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+          UISceneConfigurations:
+            UIWindowSceneSessionRoleApplication:
+              - UISceneConfigurationName: Default Configuration
+                UISceneDelegateClassName: $(PRODUCT_MODULE_NAME).SceneDelegate
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.joe.fhirpass
+        TARGETED_DEVICE_FAMILY: "1"
+        SWIFT_STRICT_CONCURRENCY: targeted
+
+  FHIRpassTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - Tests
+    dependencies:
+      - target: FHIRpass
+    settings:
+      base:
+        TARGETED_DEVICE_FAMILY: "1"
+        SWIFT_STRICT_CONCURRENCY: targeted
+        GENERATE_INFOPLIST_FILE: YES
