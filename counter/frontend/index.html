@@ -317,6 +317,7 @@
   // ── 啟動掃碼 ──────────────────────────────────────────
   async function startScanner() {
     if (isScanning) return;
+    lastPayload = "";  // 每次重新開啟相機都重置，避免擋掉相同 QR Code
     document.getElementById("reader").innerHTML = "";  // 清除舊 DOM
     scanner = new Html5Qrcode("reader");
     isScanning = true;
