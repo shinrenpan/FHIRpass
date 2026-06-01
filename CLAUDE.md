@@ -28,6 +28,13 @@ FHIRpass/
 - 中台只提供路由表，不經手 Token 與個資
 - 測試沙盒：本地 SMART Dev Sandbox（Docker，見下方）
 
+#### 多角色授權設計原則
+- **授權不限病患**：醫護人員（醫生、護理師、行政）走相同 OAuth2 架構，以 scope 區分角色
+  - 病患端：`Patient Launch`（`launch/patient`，token 帶 `patient` claim）
+  - 醫護端：`EHR Launch`（`launch`，token 帶 `encounter` / 人員身份 claim）
+- **每院獨立授權**：各醫院各自核發 token，互不通用；App 對每家醫院分開儲存 Keychain 憑證
+- **跨院整合是中台責任**：App 層只對單一醫院授權，跨院資料聚合由中台處理，不在 App 實作
+
 ### 軌道三：iPad 掃碼櫃檯模擬
 - iPad 瀏覽器用 `html5-qrcode` 掃碼 → POST 緊湊字串至地端 FastAPI（counter/backend）
 - 解碼（Base64 → 字串）後映射為 TW Core IG Patient JSON
