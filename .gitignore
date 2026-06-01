@@ -8,9 +8,9 @@
 
 # Xcode / Swift
 DerivedData/
-*.xcworkspace/xcuserdata/
-*.xcodeproj/xcuserdata/
-*.xcodeproj/project.xcworkspace/xcuserdata/
+xcuserdata/
+*.xcuserstate
+*.xcschememanagement.plist
 build/
 *.ipa
 *.dSYM.zip
