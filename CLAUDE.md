@@ -26,7 +26,8 @@ FHIRpass/
 - iOS `ASWebAuthenticationSession` + OAuth2 + PKCE
 - Token 強制鎖入 iOS Keychain（`kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly`）
 - 中台只提供路由表，不經手 Token 與個資
-- 測試沙盒：SMART Health IT（https://launch.smarthealthit.org）
+- 快速授權流程測試：SMART Health IT 公用沙盒（https://launch.smarthealthit.org）
+- 雙軌端對端整合測試：本地 SMART Dev Sandbox（Docker，見下方）
 
 ### 軌道三：iPad 掃碼櫃檯模擬
 - iPad 瀏覽器用 `html5-qrcode` 掃碼 → POST 緊湊字串至地端 FastAPI（counter/backend）
@@ -43,6 +44,28 @@ FHIRpass/
 | 生日 | `birthDate`（YYYY-MM-DD）|
 | 性別 | `gender`（male/female）|
 | 電話 | `telecom[0].value`（system: phone, use: mobile）|
+
+## 端對端整合測試架構
+
+SMART Health IT 公用沙盒只能驗證 OAuth2 授權流程（軌道二），其合成病人與 iOS App 本地建立的病人資料完全無關，**無法測試軌道一 → 軌道二的完整串接**。
+
+完整端對端測試需使用本地 **SMART Dev Sandbox**（SMART Health IT 官方 Docker image，HAPI FHIR + OAuth2 Launcher 一體）：
+
+```
+軌道一：Counter 掃 QR
+  → 解碼病人資料
+  → POST Patient 到本地 SMART Dev Sandbox
+  → FHIR server 回傳 Patient FHIR ID
+
+軌道二：iOS App OAuth2 登入
+  → Launcher 列出沙盒內所有 Patient（含剛 POST 的）
+  → 病患選取自己
+  → token.patient = 該 FHIR ID
+  → 呼叫 FHIR API 讀取同一筆病歷
+```
+
+這是唯一能完整驗證「QR 建檔 → 線上存取同一份病歷」雙軌設計的測試方式。
+SMART Dev Sandbox 設定待實作（見 `make sandbox` 規劃）。
 
 ## 中台資料庫
 SQLite（MVP），只存醫院路由表，**不存任何個資**。
