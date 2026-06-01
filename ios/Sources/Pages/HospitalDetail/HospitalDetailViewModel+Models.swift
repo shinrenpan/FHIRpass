@@ -18,7 +18,7 @@ extension HospitalDetailViewModel {
   enum AuthStatus: Sendable {
     case notConnected
     case connecting
-    case connected(accessToken: String)
+    case connected(accessToken: String, patientFhirID: String?)
     case error(String)
 
     var isConnected: Bool {
@@ -27,7 +27,12 @@ extension HospitalDetailViewModel {
     }
 
     var accessToken: String? {
-      if case let .connected(token) = self { return token }
+      if case let .connected(token, _) = self { return token }
+      return nil
+    }
+
+    var patientFhirID: String? {
+      if case let .connected(_, id) = self { return id }
       return nil
     }
   }

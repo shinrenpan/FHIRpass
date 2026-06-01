@@ -3,11 +3,8 @@ import Foundation
 // MARK: - FHIR API Calls
 
 extension HospitalDetailViewModel {
-  func fhirMakeAppointment(accessToken: String, patientIdNumber: String) async throws {
-    let patientID = try await fhirSearchPatient(
-      accessToken: accessToken,
-      idNumber: patientIdNumber
-    )
+  func fhirMakeAppointment(accessToken: String, patientFhirID: String?, patientIdNumber: String) async throws {
+    let resolvedID = try await resolvePatientID(accessToken: accessToken, patientFhirID: patientFhirID, idNumber: patientIdNumber)
     guard let url = URL(string: "\(state.hospital.fhirBaseURL)/Appointment") else {
       throw APIError.message("Invalid FHIR URL")
     }
@@ -20,7 +17,7 @@ extension HospitalDetailViewModel {
       "start": now,
       "end": end,
       "participant": [[
-        "actor": ["reference": "Patient/\(patientID)"],
+        "actor": ["reference": "Patient/\(resolvedID)"],
         "status": "accepted",
       ]],
     ]
@@ -32,16 +29,13 @@ extension HospitalDetailViewModel {
     let (_, response) = try await URLSession.shared.data(for: request)
     guard let http = response as? HTTPURLResponse,
           (200..<300).contains(http.statusCode) else {
-      throw APIError.message("線上掛號失敗，請確認此醫院是否已有您的病歷")
+      throw APIError.message("線上掛號失敗")
     }
   }
 
-  func fhirSyncMedications(accessToken: String, patientIdNumber: String) async throws -> Int {
-    let patientID = try await fhirSearchPatient(
-      accessToken: accessToken,
-      idNumber: patientIdNumber
-    )
-    guard let url = URL(string: "\(state.hospital.fhirBaseURL)/MedicationRequest?patient=\(patientID)") else {
+  func fhirSyncMedications(accessToken: String, patientFhirID: String?, patientIdNumber: String) async throws -> Int {
+    let resolvedID = try await resolvePatientID(accessToken: accessToken, patientFhirID: patientFhirID, idNumber: patientIdNumber)
+    guard let url = URL(string: "\(state.hospital.fhirBaseURL)/MedicationRequest?patient=\(resolvedID)") else {
       throw APIError.message("Invalid FHIR URL")
     }
     var request = URLRequest(url: url)
@@ -49,11 +43,12 @@ extension HospitalDetailViewModel {
     request.setValue("application/fhir+json", forHTTPHeaderField: "Accept")
     let (data, _) = try await URLSession.shared.data(for: request)
     let bundle = try JSONSerialization.jsonObject(with: data) as? [String: Any]
-    let entries = bundle?["entry"] as? [[String: Any]] ?? []
-    return entries.count
+    return (bundle?["entry"] as? [[String: Any]])?.count ?? 0
   }
 
-  private func fhirSearchPatient(accessToken: String, idNumber: String) async throws -> String {
+  // 優先用 OAuth patient context，fallback 到台灣身分證搜尋
+  private func resolvePatientID(accessToken: String, patientFhirID: String?, idNumber: String) async throws -> String {
+    if let id = patientFhirID { return id }
     guard let url = URL(string: "\(state.hospital.fhirBaseURL)/Patient?identifier=http://moi.gov.tw|\(idNumber)") else {
       throw APIError.message("Invalid FHIR URL")
     }

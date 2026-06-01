@@ -136,7 +136,7 @@ private extension HospitalDetailView {
       hospital: .init(id: "LOGICA_DEMO", name: "FHIRpass 雲端模擬醫院", fhirBaseURL: "https://sandbox.logicahealth.org", isActive: true),
       modelContext: try! ModelContainer(for: PatientProfile.self, configurations: .init(isStoredInMemoryOnly: true)).mainContext
     )
-    vm.state.authStatus = .connected(accessToken: "mock-token")
+    vm.state.authStatus = .connected(accessToken: "mock-token", patientFhirID: nil)
     return vm
   }()
   NavigationStack { HospitalDetailView(viewModel: vm) }

@@ -36,7 +36,7 @@ extension HospitalDetailViewModel {
   enum ViewAction: Sendable {
     case isFirstAppear
     case connectTap
-    case authResult(Result<String, Error>)
+    case authResult(Result<SMARTTokenResponse, Error>)
     case makeAppointmentTap
     case syncHealthRecordsTap
   }
@@ -51,9 +51,15 @@ extension HospitalDetailViewModel {
     case .connectTap:
       await startSMARTAuth()
 
-    case let .authResult(.success(token)):
-      KeychainService.save(key: state.hospital.keychainKey, value: token)
-      state.authStatus = .connected(accessToken: token)
+    case let .authResult(.success(tokenResponse)):
+      KeychainService.save(key: state.hospital.keychainKey, value: tokenResponse.access_token)
+      if let patientID = tokenResponse.patient {
+        KeychainService.save(key: state.hospital.keychainKey + ".patient", value: patientID)
+      }
+      state.authStatus = .connected(
+        accessToken: tokenResponse.access_token,
+        patientFhirID: tokenResponse.patient
+      )
 
     case let .authResult(.failure(error)):
       state.authStatus = .error(error.localizedDescription)
@@ -79,9 +85,9 @@ extension HospitalDetailViewModel {
 
 private extension HospitalDetailViewModel {
   func restoreToken() {
-    if let token = KeychainService.load(key: state.hospital.keychainKey) {
-      state.authStatus = .connected(accessToken: token)
-    }
+    guard let token = KeychainService.load(key: state.hospital.keychainKey) else { return }
+    let patientID = KeychainService.load(key: state.hospital.keychainKey + ".patient")
+    state.authStatus = .connected(accessToken: token, patientFhirID: patientID)
   }
 
   func startSMARTAuth() async {
@@ -109,13 +115,15 @@ private extension HospitalDetailViewModel {
 
   func handleMakeAppointment() async {
     guard let token = state.authStatus.accessToken else { return }
-    guard let idNumber = patientIdNumber() else {
-      state.api.makeAppointment = .error("找不到本機個人資料，請先至「個人資料」Tab 建檔")
+    let patientFhirID = state.authStatus.patientFhirID
+    let idNumber = patientIdNumber() ?? ""
+    guard patientFhirID != nil || !idNumber.isEmpty else {
+      state.api.makeAppointment = .error("找不到病患識別資料")
       return
     }
     state.api.makeAppointment = .loading
     do {
-      try await fhirMakeAppointment(accessToken: token, patientIdNumber: idNumber)
+      try await fhirMakeAppointment(accessToken: token, patientFhirID: patientFhirID, patientIdNumber: idNumber)
       state.api.makeAppointment = .success
     } catch {
       state.api.makeAppointment = .error(error.localizedDescription)
@@ -124,13 +132,15 @@ private extension HospitalDetailViewModel {
 
   func handleSyncRecords() async {
     guard let token = state.authStatus.accessToken else { return }
-    guard let idNumber = patientIdNumber() else {
-      state.api.syncRecords = .error("找不到本機個人資料，請先至「個人資料」Tab 建檔")
+    let patientFhirID = state.authStatus.patientFhirID
+    let idNumber = patientIdNumber() ?? ""
+    guard patientFhirID != nil || !idNumber.isEmpty else {
+      state.api.syncRecords = .error("找不到病患識別資料")
       return
     }
     state.api.syncRecords = .loading
     do {
-      let count = try await fhirSyncMedications(accessToken: token, patientIdNumber: idNumber)
+      let count = try await fhirSyncMedications(accessToken: token, patientFhirID: patientFhirID, patientIdNumber: idNumber)
       state.api.syncRecords = count > 0 ? .success : .error("此醫院尚無用藥紀錄")
     } catch {
       state.api.syncRecords = .error(error.localizedDescription)

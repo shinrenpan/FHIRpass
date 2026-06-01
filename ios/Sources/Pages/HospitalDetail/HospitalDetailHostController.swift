@@ -59,7 +59,7 @@ private extension HospitalDetailHostController {
             code: code,
             codeVerifier: codeVerifier
           )
-          await self.viewModel.doAction(.view(.authResult(.success(tokenResponse.access_token))))
+          await self.viewModel.doAction(.view(.authResult(.success(tokenResponse))))
         } catch {
           await self.viewModel.doAction(.view(.authResult(.failure(error))))
         }
