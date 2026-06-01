@@ -45,7 +45,9 @@ enum SMARTAuth {
 
   static func authorizationURL(config: SMARTConfig, codeChallenge: String, state: String) -> URL? {
     var components = URLComponents(string: config.authorization_endpoint)
-    components?.queryItems = [
+    // 保留 endpoint 既有的 query params（如 launch context），再 append 我們的參數
+    let existing = components?.queryItems ?? []
+    components?.queryItems = existing + [
       .init(name: "response_type",          value: "code"),
       .init(name: "client_id",              value: clientID),
       .init(name: "redirect_uri",           value: redirectURI),
