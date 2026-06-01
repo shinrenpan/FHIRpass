@@ -1,3 +1,4 @@
+import SwiftData
 import SwiftUI
 
 struct HospitalDetailView: View {
@@ -17,12 +18,18 @@ struct HospitalDetailView: View {
 
       if viewModel.state.authStatus.isConnected {
         Section("線上服務") {
-          Button("線上預約掛號") {
-            Task { await viewModel.doAction(.view(.makeAppointmentTap)) }
-          }
-          Button("同步健康紀錄") {
-            Task { await viewModel.doAction(.view(.syncHealthRecordsTap)) }
-          }
+          apiActionRow(
+            label: "線上預約掛號",
+            icon: "calendar.badge.plus",
+            status: viewModel.state.api.makeAppointment,
+            action: .makeAppointmentTap
+          )
+          apiActionRow(
+            label: "同步健康紀錄",
+            icon: "arrow.triangle.2.circlepath",
+            status: viewModel.state.api.syncRecords,
+            action: .syncHealthRecordsTap
+          )
         }
       }
     }
@@ -71,12 +78,54 @@ private extension HospitalDetailView {
       }
     }
   }
+
+  @ViewBuilder
+  func apiActionRow(
+    label: String,
+    icon: String,
+    status: APIStatus,
+    action: HospitalDetailViewModel.ViewAction
+  ) -> some View {
+    switch status {
+    case .prepare:
+      Button {
+        Task { await viewModel.doAction(.view(action)) }
+      } label: {
+        Label(label, systemImage: icon)
+      }
+
+    case .loading:
+      HStack {
+        ProgressView()
+        Text(label)
+          .foregroundStyle(.secondary)
+      }
+
+    case .success:
+      Label(label + " 完成", systemImage: "checkmark.circle.fill")
+        .foregroundStyle(.green)
+
+    case let .error(message):
+      VStack(alignment: .leading, spacing: 4) {
+        Label(label + " 失敗", systemImage: "xmark.circle")
+          .foregroundStyle(.red)
+        Text(message)
+          .font(.caption)
+          .foregroundStyle(.secondary)
+        Button("重試") {
+          Task { await viewModel.doAction(.view(action)) }
+        }
+        .font(.caption)
+      }
+    }
+  }
 }
 
 #if DEBUG
 #Preview("未授權") {
   let vm = HospitalDetailViewModel(
-    hospital: .init(id: "LOGICA_DEMO", name: "FHIRpass 雲端模擬醫院", fhirBaseURL: "https://sandbox.logicahealth.org", isActive: true)
+    hospital: .init(id: "LOGICA_DEMO", name: "FHIRpass 雲端模擬醫院", fhirBaseURL: "https://sandbox.logicahealth.org", isActive: true),
+    modelContext: try! ModelContainer(for: PatientProfile.self, configurations: .init(isStoredInMemoryOnly: true)).mainContext
   )
   NavigationStack { HospitalDetailView(viewModel: vm) }
 }
@@ -84,7 +133,8 @@ private extension HospitalDetailView {
 #Preview("已授權") {
   let vm: HospitalDetailViewModel = {
     let vm = HospitalDetailViewModel(
-      hospital: .init(id: "LOGICA_DEMO", name: "FHIRpass 雲端模擬醫院", fhirBaseURL: "https://sandbox.logicahealth.org", isActive: true)
+      hospital: .init(id: "LOGICA_DEMO", name: "FHIRpass 雲端模擬醫院", fhirBaseURL: "https://sandbox.logicahealth.org", isActive: true),
+      modelContext: try! ModelContainer(for: PatientProfile.self, configurations: .init(isStoredInMemoryOnly: true)).mainContext
     )
     vm.state.authStatus = .connected(accessToken: "mock-token")
     return vm

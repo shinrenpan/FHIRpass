@@ -7,6 +7,12 @@ extension HospitalDetailViewModel {
     var isFirstAppear = true
     var hospital: Hospital
     var authStatus: AuthStatus = .notConnected
+    var api: API = .init()
+  }
+
+  struct API: Sendable {
+    var makeAppointment: APIStatus = .prepare
+    var syncRecords: APIStatus = .prepare
   }
 
   enum AuthStatus: Sendable {
@@ -19,6 +25,11 @@ extension HospitalDetailViewModel {
       if case .connected = self { return true }
       return false
     }
+
+    var accessToken: String? {
+      if case let .connected(token) = self { return token }
+      return nil
+    }
   }
 }
 
@@ -29,5 +40,11 @@ extension HospitalDetailViewModel {
     let id: String
     let name: String
     let fhirBaseURL: String
+
+    var wellKnownURL: URL? {
+      URL(string: "\(fhirBaseURL)/.well-known/smart-configuration")
+    }
+
+    var keychainKey: String { "token.\(id)" }
   }
 }

@@ -13,6 +13,7 @@
 		08DB494039594F8AF14FFD44 /* HospitalDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A193379343949AD5837089 /* HospitalDetailViewModel.swift */; };
 		0F35D2834A911850F56C8D22 /* QRCodeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7873B2CAB6F6B4BBBCC973B /* QRCodeViewModel.swift */; };
 		11478F9E2ABD7BB541F16335 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3AAE8055BB20980A6EF15B /* AppRouter.swift */; };
+		2377E5D8EDD27D23C089CCC9 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E28A1E48F0CD27F1B0AF1F80 /* KeychainService.swift */; };
 		2AAB089CD6DC51C12CC4011E /* HospitalDetailViewModel+Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23803A92972D341F88E26109 /* HospitalDetailViewModel+Models.swift */; };
 		333AB19ABBBBD614A1897277 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52392CFE7D34E8C8666CF87 /* ProfileView.swift */; };
 		335FFACA2340CE9DF3FB586C /* HospitalDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED29A5D1FE5DC5A48501438 /* HospitalDetailView.swift */; };
@@ -20,6 +21,7 @@
 		8BCEBC2174E50CC00E72FBA4 /* ProfileViewModel+Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99ECC818AE4987405325E3F0 /* ProfileViewModel+Models.swift */; };
 		90A1E97E503543CBDE900924 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9619CCC55E71FFD4CC982F /* SceneDelegate.swift */; };
 		925C5530442364E09EAF8FFE /* QRCodeHostController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B57EF935B98D62260611EEEB /* QRCodeHostController.swift */; };
+		9F3447BD37FC6F680CD8AA93 /* SMARTAuth.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE872506C4725448832AF364 /* SMARTAuth.swift */; };
 		AF9D3723AF7D14F338D95E72 /* QRCodeViewModel+Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB2E8B28C632B5A0403364B /* QRCodeViewModel+Models.swift */; };
 		B6E3F333D82C5DDE9BC54533 /* Deeplink.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC29BF72003BC875EA262B98 /* Deeplink.swift */; };
 		C10B5DDAA3F7AA5247FA0644 /* HospitalListViewModel+Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89057A29D63A620F6425D263 /* HospitalListViewModel+Models.swift */; };
@@ -28,6 +30,7 @@
 		CADB7BCF5BC8192BB19966CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1FB485B870A29BC5D0132F /* AppDelegate.swift */; };
 		CD483D7C5776AD166E21AF4B /* PatientProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFE93315C423A625E2FA077 /* PatientProfile.swift */; };
 		D1878B7CD629BBCE8D25AABF /* HospitalDetailHostController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB5A4466F0014EDBC552F76 /* HospitalDetailHostController.swift */; };
+		F2F6842DFED75A3F58026620 /* HospitalDetailViewModel+APIs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D9443DD51761F3718C4F5F6 /* HospitalDetailViewModel+APIs.swift */; };
 		FA3D4FBFFB846C7184AF86CE /* HospitalListHostController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B353A990F415CF14010AD8AD /* HospitalListHostController.swift */; };
 		FEEC38282E2A0934744EA64F /* APIStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61DEF417264F9354D7EB1755 /* APIStatus.swift */; };
 /* End PBXBuildFile section */
@@ -47,6 +50,7 @@
 		0DB2E8B28C632B5A0403364B /* QRCodeViewModel+Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QRCodeViewModel+Models.swift"; sourceTree = "<group>"; };
 		21CE730849E46B2417F79534 /* QRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeView.swift; sourceTree = "<group>"; };
 		23803A92972D341F88E26109 /* HospitalDetailViewModel+Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HospitalDetailViewModel+Models.swift"; sourceTree = "<group>"; };
+		2D9443DD51761F3718C4F5F6 /* HospitalDetailViewModel+APIs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HospitalDetailViewModel+APIs.swift"; sourceTree = "<group>"; };
 		3939D5C93D9E67FD83E10321 /* FHIRpassTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = FHIRpassTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F3AAE8055BB20980A6EF15B /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
 		4ED29A5D1FE5DC5A48501438 /* HospitalDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HospitalDetailView.swift; sourceTree = "<group>"; };
@@ -64,8 +68,10 @@
 		C52392CFE7D34E8C8666CF87 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		CDB5A4466F0014EDBC552F76 /* HospitalDetailHostController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HospitalDetailHostController.swift; sourceTree = "<group>"; };
 		CDDF8E1AFCB7B456262FEB5E /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		CE872506C4725448832AF364 /* SMARTAuth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SMARTAuth.swift; sourceTree = "<group>"; };
 		D0EA5E2214F0B82A147E27E0 /* HospitalListViewModel+APIs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HospitalListViewModel+APIs.swift"; sourceTree = "<group>"; };
 		E04C931D21D3471BBBE854D1 /* FHIRpass.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = FHIRpass.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E28A1E48F0CD27F1B0AF1F80 /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
 		EC29BF72003BC875EA262B98 /* Deeplink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Deeplink.swift; sourceTree = "<group>"; };
 		F7873B2CAB6F6B4BBBCC973B /* QRCodeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRCodeViewModel.swift; sourceTree = "<group>"; };
 		FF1FB485B870A29BC5D0132F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -136,7 +142,9 @@
 			isa = PBXGroup;
 			children = (
 				61DEF417264F9354D7EB1755 /* APIStatus.swift */,
+				E28A1E48F0CD27F1B0AF1F80 /* KeychainService.swift */,
 				ACFE93315C423A625E2FA077 /* PatientProfile.swift */,
+				CE872506C4725448832AF364 /* SMARTAuth.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -156,6 +164,7 @@
 				CDB5A4466F0014EDBC552F76 /* HospitalDetailHostController.swift */,
 				4ED29A5D1FE5DC5A48501438 /* HospitalDetailView.swift */,
 				00A193379343949AD5837089 /* HospitalDetailViewModel.swift */,
+				2D9443DD51761F3718C4F5F6 /* HospitalDetailViewModel+APIs.swift */,
 				23803A92972D341F88E26109 /* HospitalDetailViewModel+Models.swift */,
 			);
 			path = HospitalDetail;
@@ -264,6 +273,7 @@
 				B6E3F333D82C5DDE9BC54533 /* Deeplink.swift in Sources */,
 				D1878B7CD629BBCE8D25AABF /* HospitalDetailHostController.swift in Sources */,
 				335FFACA2340CE9DF3FB586C /* HospitalDetailView.swift in Sources */,
+				F2F6842DFED75A3F58026620 /* HospitalDetailViewModel+APIs.swift in Sources */,
 				2AAB089CD6DC51C12CC4011E /* HospitalDetailViewModel+Models.swift in Sources */,
 				08DB494039594F8AF14FFD44 /* HospitalDetailViewModel.swift in Sources */,
 				FA3D4FBFFB846C7184AF86CE /* HospitalListHostController.swift in Sources */,
@@ -271,6 +281,7 @@
 				3FC064869A88B16818F77D42 /* HospitalListViewModel+APIs.swift in Sources */,
 				C10B5DDAA3F7AA5247FA0644 /* HospitalListViewModel+Models.swift in Sources */,
 				073881E70C18807153B45671 /* HospitalListViewModel.swift in Sources */,
+				2377E5D8EDD27D23C089CCC9 /* KeychainService.swift in Sources */,
 				CD483D7C5776AD166E21AF4B /* PatientProfile.swift in Sources */,
 				038C9B5F0A4FB62A6970878B /* ProfileHostController.swift in Sources */,
 				333AB19ABBBBD614A1897277 /* ProfileView.swift in Sources */,
@@ -280,6 +291,7 @@
 				C73EB4AC40D85762B7B5EB84 /* QRCodeView.swift in Sources */,
 				AF9D3723AF7D14F338D95E72 /* QRCodeViewModel+Models.swift in Sources */,
 				0F35D2834A911850F56C8D22 /* QRCodeViewModel.swift in Sources */,
+				9F3447BD37FC6F680CD8AA93 /* SMARTAuth.swift in Sources */,
 				90A1E97E503543CBDE900924 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

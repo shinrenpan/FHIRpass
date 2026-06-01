@@ -1,11 +1,14 @@
+import SwiftData
 import SwiftUI
 
 @MainActor
 final class HospitalListHostController: UIHostingController<HospitalListView> {
   private let viewModel: HospitalListViewModel
+  private let modelContext: ModelContext
 
-  init(viewModel: HospitalListViewModel) {
+  init(viewModel: HospitalListViewModel, modelContext: ModelContext) {
     self.viewModel = viewModel
+    self.modelContext = modelContext
     super.init(rootView: HospitalListView(viewModel: viewModel))
   }
 
@@ -26,10 +29,8 @@ private extension HospitalListHostController {
   func handleRouter(_ router: HospitalListViewModel.Router) {
     switch router {
     case let .toHospitalDetail(hospital):
-      AppRouter.shared.to(
-        HospitalDetailHostController(viewModel: .init(hospital: hospital)),
-        from: self
-      )
+      let vm = HospitalDetailViewModel(hospital: hospital, modelContext: modelContext)
+      AppRouter.shared.to(HospitalDetailHostController(viewModel: vm), from: self)
     }
   }
 }

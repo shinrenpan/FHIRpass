@@ -26,7 +26,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     qrNav.tabBarItem = UITabBarItem(title: "通行碼", image: UIImage(systemName: "qrcode"), tag: 0)
 
     let hospitalNav = UINavigationController(
-      rootViewController: HospitalListHostController(viewModel: .init())
+      rootViewController: HospitalListHostController(viewModel: .init(), modelContext: context)
     )
     hospitalNav.tabBarItem = UITabBarItem(title: "合作醫院", image: UIImage(systemName: "cross.case"), tag: 1)
 
