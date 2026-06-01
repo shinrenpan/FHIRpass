@@ -43,11 +43,27 @@ private extension HospitalDetailHostController {
         return
       }
       guard let callbackURL,
-            let components = URLComponents(url: callbackURL, resolvingAgainstBaseURL: false),
-            let code = components.queryItems?.first(where: { $0.name == "code" })?.value else {
+            let components = URLComponents(url: callbackURL, resolvingAgainstBaseURL: false) else {
         Task {
           await self.viewModel.doAction(
             .view(.authResult(.failure(APIError.message("無效的授權回調 URL"))))
+          )
+        }
+        return
+      }
+      // SMART server 回傳 error 參數時（如 invalid_client、access_denied）
+      if let oauthError = components.queryItems?.first(where: { $0.name == "error" })?.value {
+        let desc = components.queryItems?.first(where: { $0.name == "error_description" })?.value
+        let msg = desc.map { "\(oauthError): \($0)" } ?? oauthError
+        Task {
+          await self.viewModel.doAction(.view(.authResult(.failure(APIError.message(msg)))))
+        }
+        return
+      }
+      guard let code = components.queryItems?.first(where: { $0.name == "code" })?.value else {
+        Task {
+          await self.viewModel.doAction(
+            .view(.authResult(.failure(APIError.message("Callback URL 缺少 authorization code"))))
           )
         }
         return

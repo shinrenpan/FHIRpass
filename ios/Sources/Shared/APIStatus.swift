@@ -1,5 +1,12 @@
-enum APIError: Error, Sendable {
+import Foundation
+
+enum APIError: LocalizedError, Sendable {
   case message(String)
+
+  var errorDescription: String? {
+    if case let .message(msg) = self { return msg }
+    return nil
+  }
 }
 
 enum APIStatus: Equatable, Sendable {
