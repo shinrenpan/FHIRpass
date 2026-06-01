@@ -160,6 +160,23 @@
     .confirm-btn:hover { background: #15803d; }
     .confirm-btn.visible { display: block; }
 
+    .rescan-btn {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      background: white;
+      color: #374151;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+      display: none;
+    }
+    .rescan-btn:hover { background: #f3f4f6; }
+    .rescan-btn.visible { display: block; }
+
     .confirmed-msg {
       text-align: center;
       padding: 14px;
@@ -259,6 +276,9 @@
     <button class="confirm-btn" id="confirm-btn" onclick="confirmAdmit()">
       ✓ 確認寫入建檔
     </button>
+    <button class="rescan-btn" id="rescan-btn" onclick="rescan()">
+      重新掃描
+    </button>
     <div class="confirmed-msg" id="confirmed-msg">
       ✅ 初診建檔完成！請引導病患至候診區。
     </div>
@@ -276,30 +296,41 @@
   let lastPayload = "";
 
   // ── 啟動掃碼 ──────────────────────────────────────────
-  function startScanner() {
+  async function startScanner() {
     if (isScanning) return;
+    document.getElementById("reader").innerHTML = "";  // 清除舊 DOM
     scanner = new Html5Qrcode("reader");
-    setStatus("scanning", "掃碼中，請將 QR Code 對準鏡頭…");
     isScanning = true;
+    setStatus("scanning", "掃碼中，請將 QR Code 對準鏡頭…");
 
-    scanner.start(
-      { facingMode: "environment" },
-      { fps: 10, qrbox: { width: 220, height: 220 } },
-      onScanSuccess,
-      () => {}  // 忽略偵測中的 error log
-    ).catch(err => {
+    try {
+      await scanner.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: { width: 220, height: 220 } },
+        onScanSuccess,
+        () => {}
+      );
+    } catch (err) {
       setStatus("error", "無法啟動相機：" + err);
       isScanning = false;
-    });
+    }
+  }
+
+  async function stopScanner() {
+    if (scanner && isScanning) {
+      await scanner.stop();
+      isScanning = false;
+      scanner = null;
+    }
   }
 
   // ── 掃到後處理 ────────────────────────────────────────
   async function onScanSuccess(payload) {
-    if (payload === lastPayload) return;   // 防止重複觸發
+    if (payload === lastPayload) return;
     lastPayload = payload;
 
     setStatus("success", "掃描成功，解析中…");
-    await scanner.pause();
+    await stopScanner();  // 關閉相機
 
     try {
       const res = await fetch(`${BACKEND}/scan`, {
@@ -318,8 +349,8 @@
       setStatus("success", "✅ 解析完成，請確認資料無誤");
     } catch (e) {
       setStatus("error", "❌ " + e.message);
-      await scanner.resume();
       lastPayload = "";
+      startScanner();  // 解碼失敗則重啟相機繼續掃
     }
   }
 
@@ -335,17 +366,23 @@
     document.getElementById("fhir-json").innerHTML = syntaxHighlight(data.patient);
     document.getElementById("patient-card").classList.add("visible");
     document.getElementById("confirm-btn").classList.add("visible");
+    document.getElementById("rescan-btn").classList.add("visible");
     document.getElementById("confirmed-msg").classList.remove("visible");
   }
 
   // ── 確認寫入（模擬）────────────────────────────────────
   async function confirmAdmit() {
     document.getElementById("confirm-btn").classList.remove("visible");
+    document.getElementById("rescan-btn").classList.remove("visible");
     document.getElementById("confirmed-msg").classList.add("visible");
     setStatus("idle", "建檔完成。可繼續掃下一位病患。");
 
-    // 3 秒後重置，準備下一位
     await delay(3000);
+    resetForNext();
+  }
+
+  // ── 重新掃描（取消目前病患）──────────────────────────
+  function rescan() {
     resetForNext();
   }
 
@@ -353,10 +390,10 @@
     lastPayload = "";
     document.getElementById("patient-card").classList.remove("visible");
     document.getElementById("confirm-btn").classList.remove("visible");
+    document.getElementById("rescan-btn").classList.remove("visible");
     document.getElementById("confirmed-msg").classList.remove("visible");
     document.getElementById("empty-hint").style.display = "";
-    setStatus("scanning", "掃碼中，請將 QR Code 對準鏡頭…");
-    if (scanner) scanner.resume();
+    startScanner();
   }
 
   // ── 工具 ──────────────────────────────────────────────
