@@ -313,6 +313,7 @@
   let scanner = null;
   let isScanning = false;
   let lastPayload = "";
+  let currentPatient = null;  // 暫存 /scan 回傳的 patient JSON，供 /register 使用
 
   // ── 啟動掃碼 ──────────────────────────────────────────
   async function startScanner() {
@@ -373,6 +374,7 @@
       }
 
       const data = await res.json();
+      currentPatient = data.patient;
       showPatient(data);
       setStatus("success", "✅ 解析完成，請確認資料無誤");
     } catch (e) {
@@ -398,14 +400,37 @@
     document.getElementById("confirmed-msg").classList.remove("visible");
   }
 
-  // ── 確認寫入（模擬）────────────────────────────────────
+  // ── 確認寫入（POST 至 HAPI FHIR）──────────────────────
   async function confirmAdmit() {
     document.getElementById("confirm-btn").classList.remove("visible");
     document.getElementById("rescan-btn").classList.remove("visible");
-    document.getElementById("confirmed-msg").classList.add("visible");
-    setStatus("idle", "建檔完成。可繼續掃下一位病患。");
+    setStatus("scanning", "寫入 FHIR Server 中…");
 
-    await delay(3000);
+    try {
+      const res = await fetch(`${BACKEND}/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(currentPatient),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.detail ?? "寫入失敗");
+      }
+
+      const result = await res.json();
+      const msg = document.getElementById("confirmed-msg");
+      msg.textContent = `✅ 建檔完成！FHIR Patient ID：${result.fhir_id}`;
+      msg.classList.add("visible");
+      setStatus("success", "建檔完成。可繼續掃下一位病患。");
+    } catch (e) {
+      setStatus("error", "❌ " + e.message);
+      document.getElementById("confirm-btn").classList.add("visible");
+      document.getElementById("rescan-btn").classList.add("visible");
+      return;
+    }
+
+    await delay(4000);
     resetForNext();
   }
 
