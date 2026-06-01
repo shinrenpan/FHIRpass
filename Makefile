@@ -12,7 +12,10 @@ server:
 	server/.venv/bin/uvicorn app.main:app --reload --port 8000 --app-dir server
 
 counter:
-	counter/backend/.venv/bin/uvicorn app.main:app --reload --port 8001 --app-dir counter/backend
+	counter/backend/.venv/bin/uvicorn app.main:app --reload --host 0.0.0.0 --port 8001 \
+		--ssl-keyfile counter/backend/certs/key.pem \
+		--ssl-certfile counter/backend/certs/cert.pem \
+		--app-dir counter/backend
 
 dev:
 	@make -j2 server counter

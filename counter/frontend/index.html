@@ -267,7 +267,8 @@
 
 <script>
   // ── 設定 ──────────────────────────────────────────────
-  const BACKEND = "http://localhost:8001";
+  // frontend 由 backend 同源提供，直接用 origin 即可
+  const BACKEND = window.location.origin;
 
   // ── 狀態 ──────────────────────────────────────────────
   let scanner = null;

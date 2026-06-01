@@ -70,10 +70,33 @@ schema 位於 `server/app/models.py`，表名 `hospital_routing`。
 目標格式：緊湊字串 → Gzip → Base64（< 100 Bytes）
 等 `counter/backend` 解碼端建好後一起實作，確保兩端同步更新。
 
+## 首次設定（clone 後必做）
+
+### 1. Python 虛擬環境
+```bash
+make setup
+```
+
+### 2. Counter SSL 憑證（.pem 不進 repo，需手動產生）
+iPad Safari 要求 HTTPS 才能存取相機，憑證放在 `counter/backend/certs/`。
+```bash
+mkdir -p counter/backend/certs
+openssl req -x509 -newkey rsa:2048 \
+  -keyout counter/backend/certs/key.pem \
+  -out    counter/backend/certs/cert.pem \
+  -days 365 -nodes \
+  -subj "/CN=fhirpass-counter" \
+  -addext "subjectAltName=IP:<你的Mac區網IP>,IP:127.0.0.1"
+```
+Mac 區網 IP 查詢：`ipconfig getifaddr en0`
+
+iPad Safari 第一次連線會出現「無法驗證憑證」警告，點「繼續前往」即可。
+
 ## 常用指令
 ```bash
-make setup    # 建立所有 Python venv 並安裝依賴
-make server   # 啟動中台（port 8000）
-make counter  # 啟動 Counter 後端（port 8001）
+make server   # 啟動中台（port 8000，HTTP）
+make counter  # 啟動 Counter（port 8001，HTTPS）
 make dev      # 同時啟動兩個後端
 ```
+
+iPad 開啟 Counter：`https://<Mac區網IP>:8001`

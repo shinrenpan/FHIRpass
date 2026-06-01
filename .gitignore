@@ -53,6 +53,9 @@ npm-debug.log*
 # Logs
 *.log
 
+# SSL 憑證（自簽，不進 repo）
+*.pem
+
 # Database
 *.db
 *.sqlite
