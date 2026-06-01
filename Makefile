@@ -18,4 +18,5 @@ counter:
 		--app-dir counter/backend
 
 dev:
-	@make -j2 server counter
+	@make server &
+	@make counter
