@@ -123,7 +123,7 @@ sequenceDiagram
 }
 ```
 
-### 2. My Server 數據庫設計（去識別化無狀態路由表）
+### 2. 中台 Server 數據庫設計（去識別化無狀態路由表）
 中台 Server **完全不儲存**任何病人的敏感醫療隱私、個資與 OAuth 憑證，僅需維護一張符合 SMART on FHIR 規範的合作醫院動態連線黃頁簿（Hospital Routing Table），支援動態發現（Discovery）與靜態配置雙軌制：
 
 ```sql
