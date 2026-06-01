@@ -2,11 +2,11 @@
 QR Code 緊湊字串編解碼模組
 
 格式：身分證|姓名|生日(YYYYMMDD)|性別(M/F)|電話
-編碼：UTF-8 → Base64
-（Gzip 壓縮待 iOS 端同步後加入，屆時兩端一起更新）
+編碼：UTF-8 → zlib 壓縮 → Base64
 """
 
 import base64
+import zlib
 from dataclasses import dataclass
 from datetime import date, datetime
 
@@ -21,11 +21,11 @@ class PatientData:
 
 
 def decode(payload: str) -> PatientData:
-    """Base64 payload → PatientData"""
+    """Base64 → zlib 解壓縮 → PatientData"""
     try:
-        compact = base64.b64decode(payload).decode("utf-8")
+        compact = zlib.decompress(base64.b64decode(payload)).decode("utf-8")
     except Exception as e:
-        raise ValueError(f"Base64 解碼失敗: {e}")
+        raise ValueError(f"解碼失敗: {e}")
 
     parts = compact.split("|")
     if len(parts) != 5:

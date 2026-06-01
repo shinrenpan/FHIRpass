@@ -19,7 +19,7 @@ FHIRpass/
 
 ### 軌道一：離線 QR 建檔（完全不走網路）
 - QR 緊湊格式：`身分證|姓名|生日(YYYYMMDD)|性別(M/F)|電話`
-- 現行編碼：UTF-8 → Base64（Gzip 壓縮待實作，見「已知限制」）
+- 編碼：UTF-8 → zlib 壓縮 → Base64
 - iOS App 地端加密存檔（SwiftData），中台完全不參與
 
 ### 軌道二：SMART on FHIR 線上授權
@@ -67,11 +67,6 @@ SQLite（MVP），只存醫院路由表，**不存任何個資**。
 - `QRCode` Tab 上方加成員 Picker 切換
 - `Profile` Tab 改成列表（新增 `ProfileList` Page，原 `Profile` 改名 `ProfileDetail`）
 - 新增 Profile 時加**代理聲明 checkbox**（符合個資法：確認已取得被代理人同意或具合法代理權）
-
-### QR 編碼（待加 Gzip 壓縮）
-目前格式：緊湊字串 → Base64
-目標格式：緊湊字串 → Gzip → Base64（< 100 Bytes）
-iOS（`QRCodeViewModel+Models.swift`）與 Python（`shared/qr_codec.py`）須同步更新。
 
 ### Deeplink（待實作）
 `Deeplink.swift` 目前 `init?` 永遠回傳 `nil`（無已實作的 case）。

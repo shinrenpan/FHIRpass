@@ -34,7 +34,7 @@
     * 透過整合開源 JavaScript 掃碼庫（`html5-qrcode`），能對民眾出示的動態 QR Code 進行即時捕捉與高速解析，並將讀取到的緊湊編碼透過區網發送至地端 API。
 * **地端接收後端 (解碼與 HIS 模擬模組)**：
     * 運行於醫院內部區網伺服器（Demo 時可於 Mac/PC 本地端運行 FastAPI）。
-    * 負責接收緊湊字串，執行 Base64 解碼，並將原生個資自動映射（Mapping）組裝成標準的 **TW Core IG Patient JSON**。
+    * 負責接收緊湊字串，執行 Base64 解碼與 zlib 解壓縮，並將原生個資自動映射（Mapping）組裝成標準的 **TW Core IG Patient JSON**。
     * **HIS 模擬展示**：網頁右側會立刻亮起成功綠燈，以高科技感的可視化表格（Table）與標準 FHIR 樹狀結構呈現該病患資料，模擬點擊「確認寫入」即可一秒完成初診建檔。
 
 ---

@@ -21,11 +21,13 @@ extension QRCodeViewModel {
     let phone: String
 
     // 緊湊格式：身分證|姓名|生日(YYYYMMDD)|性別(M/F)|電話
-    // TODO: 加上 Gzip 壓縮以符合 Spec 要求 < 100 Bytes
+    // 編碼：UTF-8 → zlib 壓縮 → Base64
     var qrPayload: String {
       let genderCode = gender == "male" ? "M" : "F"
       let compact = "\(idNumber)|\(name)|\(Self.birthdayFormatter.string(from: birthday))|\(genderCode)|\(phone)"
-      return Data(compact.utf8).base64EncodedString()
+      let data = Data(compact.utf8)
+      let payload = (try? (data as NSData).compressed(using: .zlib) as Data) ?? data
+      return payload.base64EncodedString()
     }
 
     private static let birthdayFormatter: DateFormatter = {
