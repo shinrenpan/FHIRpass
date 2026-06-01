@@ -9,7 +9,6 @@ setup:
 	counter/backend/.venv/bin/pip install -r counter/backend/requirements.txt
 
 server:
-	cd server && ../.venv/bin/uvicorn app.main:app --reload --port 8000 2>/dev/null || \
 	server/.venv/bin/uvicorn app.main:app --reload --port 8000 --app-dir server
 
 counter:
