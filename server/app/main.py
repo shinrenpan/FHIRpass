@@ -31,11 +31,11 @@ async def _seed():
             return
 
         db.add(HospitalRouting(
-            fhir_id="SMART_HEALTH_IT",
-            hospital_name="SMART Health IT 測試沙盒",
-            fhir_base_url="https://launch.smarthealthit.org/v/r4/fhir",
+            fhir_id="DEV_SANDBOX",
+            hospital_name="本地開發沙盒",
+            fhir_base_url="http://localhost:9090/fhir",
             smart_well_known_url=(
-                "https://launch.smarthealthit.org/v/r4/fhir"
+                "http://localhost:9090/fhir"
                 "/.well-known/smart-configuration"
             ),
             is_active=True,

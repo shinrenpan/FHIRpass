@@ -156,27 +156,27 @@ CREATE TABLE hospital_routing (
     * **解碼端**：開發筆電本地運行 FastAPI 服務，接收 iPad 區網 POST 請求並進行還原，完全模擬醫院防火牆內的獨立運作流。
 
 ### 2. 軌道二（SMART on FHIR 線上授權）測試配置
-
-本 MVP 採**雙層測試策略**：
-
-#### 2a. 快速授權流程驗證（公用沙盒）
-* **測試範疇**：OAuth2 + PKCE 流程、ASWebAuthenticationSession 喚起、Token 換發與 Keychain 鎖入。
-* **環境設定**：[SMART Health IT](https://launch.smarthealthit.org) 公用沙盒（免註冊，含現成合成 Patient）。
-* **測試流程**：`make server` 啟動中台 → iOS App 點選「SMART Health IT 測試沙盒」→ 點「連結此醫院帳號」→ Safari 跳出授權頁並選取測試 Patient → Token 自動鎖入 Keychain → 顯示「已完成授權」。
-* **限制**：沙盒合成病人與 iOS App 本地建立的病人資料無關，僅能驗證授權流程，**無法測試雙軌串接**。
-
-#### 2b. 雙軌端對端整合測試（本地 Docker 沙盒）
 * **測試範疇**：完整驗證「QR 建檔（軌道一）→ OAuth2 存取同一份病歷（軌道二）」全程閉環。
-* **環境設定**：本地 SMART Dev Sandbox（SMART Health IT 官方 Docker image，HAPI FHIR + OAuth2 Launcher 一體）。
-* **完整流程**：
+* **環境設定**：本地 SMART Dev Sandbox（SMART Health IT 官方 Docker image，HAPI FHIR + OAuth2 Launcher 一體），`make sandbox` 啟動。
+* **測試數據初始化範例**：Server 首次啟動自動 seed：
+
+```sql
+INSERT INTO hospital_routing (fhir_id, hospital_name, fhir_base_url, smart_well_known_url)
+VALUES (
+  'DEV_SANDBOX',
+  '本地開發沙盒',
+  'http://localhost:9090/fhir',
+  'http://localhost:9090/fhir/.well-known/smart-configuration'
+);
+```
+
+* **完整測試流程**：
 
 ```
 軌道一：Counter 掃 QR → 解碼病人資料 → POST Patient 到本地沙盒 → 取得 FHIR Patient ID
 軌道二：iOS App OAuth2 → Launcher 列出沙盒 Patient（含剛建的）→ 選取 → token.patient = 該 ID
         → iOS App 呼叫 FHIR API → 讀取同一筆病歷
 ```
-
-* **狀態**：規劃中（`make sandbox`，待實作）。
 
 ---
 
