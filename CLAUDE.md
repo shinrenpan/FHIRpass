@@ -53,6 +53,23 @@ schema 位於 `server/app/models.py`，表名 `hospital_routing`。
 - iOS: Xcode 16+、Swift 6、iOS 17+
 - 共用解碼邏輯放在 `shared/`，counter/backend 透過 `sys.path` 或 pip editable install 引用
 
+## 已知限制與後續規劃
+
+### 單一使用者（待擴充為多使用者）
+目前每個裝置只支援一筆 `PatientProfile`（MVP 合理取捨）。
+實際使用情境有多使用者需求（例如父母替嬰兒報到、子女代年邁父母掛號）。
+
+擴充時需要異動：
+- `PatientProfile` 加 `isDefault: Bool` 欄位
+- `QRCode` Tab 上方加成員 Picker 切換
+- `Profile` Tab 改成列表（新增 `ProfileList` Page，原 `Profile` 改名 `ProfileDetail`）
+- 新增 Profile 時加**代理聲明 checkbox**（符合個資法：確認已取得被代理人同意或具合法代理權）
+
+### QR 編碼（待加 Gzip 壓縮）
+目前格式：緊湊字串 → Base64
+目標格式：緊湊字串 → Gzip → Base64（< 100 Bytes）
+等 `counter/backend` 解碼端建好後一起實作，確保兩端同步更新。
+
 ## 常用指令
 ```bash
 make setup    # 建立所有 Python venv 並安裝依賴
