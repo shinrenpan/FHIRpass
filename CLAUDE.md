@@ -26,7 +26,7 @@ FHIRpass/
 - iOS `ASWebAuthenticationSession` + OAuth2 + PKCE
 - Token 強制鎖入 iOS Keychain（`kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly`）
 - 中台只提供路由表，不經手 Token 與個資
-- 測試沙盒：Logica Health FHIR Sandbox
+- 測試沙盒：SMART Health IT（https://launch.smarthealthit.org）
 
 ### 軌道三：iPad 掃碼櫃檯模擬
 - iPad 瀏覽器用 `html5-qrcode` 掃碼 → POST 緊湊字串至地端 FastAPI（counter/backend）
@@ -47,7 +47,7 @@ FHIRpass/
 ## 中台資料庫
 SQLite（MVP），只存醫院路由表，**不存任何個資**。
 `server/app/models.py` → `HospitalRouting`（表名 `hospital_routing`）。
-首次啟動時自動建表，並 seed 一筆 `LOGICA_DEMO_HOSPITAL`（Logica 雲端沙盒）。
+首次啟動時自動建表，並 seed 一筆 `SMART_HEALTH_IT`（SMART Health IT 公用測試沙盒）。
 
 ## 開發環境
 - Python: 3.11+，使用 venv

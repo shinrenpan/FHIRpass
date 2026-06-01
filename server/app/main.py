@@ -31,11 +31,11 @@ async def _seed():
             return
 
         db.add(HospitalRouting(
-            fhir_id="LOGICA_DEMO_HOSPITAL",
-            hospital_name="FHIRpass 雲端模擬醫院",
-            fhir_base_url="https://sandbox.logicahealth.org/fhirpass_mvp/api/FHIR/R4",
+            fhir_id="SMART_HEALTH_IT",
+            hospital_name="SMART Health IT 測試沙盒",
+            fhir_base_url="https://launch.smarthealthit.org/v/r4/fhir",
             smart_well_known_url=(
-                "https://sandbox.logicahealth.org/fhirpass_mvp/api/FHIR/R4"
+                "https://launch.smarthealthit.org/v/r4/fhir"
                 "/.well-known/smart-configuration"
             ),
             is_active=True,

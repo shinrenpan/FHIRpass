@@ -157,20 +157,20 @@ CREATE TABLE hospital_routing (
 
 ### 2. 軌道二（SMART on FHIR 線上授權）測試配置
 * **測試範疇**：iOS `ASWebAuthenticationSession` 瀏覽器喚醒、OAuth2 + PKCE 流程安全校驗、Access Token 換發與 iOS Keychain 鎖入、標準 FHIR 醫療數據語法讀寫。
-* **環境設定**：**對接國際公用開源 SMART on FHIR Sandbox 服務**（如 Logica Sandbox 或公用 HAPI FHIR 伺服器）。
-* **測試數據初始化範例**：在中台數據庫中注入一筆虛擬醫院資料（對接 Logica 開發者沙盒）：
+* **環境設定**：對接 [SMART Health IT](https://launch.smarthealthit.org) 公用測試沙盒（免註冊，提供標準 SMART on FHIR R4 端點與現成測試 Patient）。
+* **測試數據初始化範例**：Server 首次啟動自動 seed：
 
 ```sql
 INSERT INTO hospital_routing (fhir_id, hospital_name, fhir_base_url, smart_well_known_url)
 VALUES (
-  'LOGICA_DEMO_HOSPITAL',
-  'FHIRpass 雲端模擬醫院',
-  'https://sandbox.logicahealth.org/fhirpass_mvp/api/FHIR/R4',
-  'https://sandbox.logicahealth.org/fhirpass_mvp/api/FHIR/R4/.well-known/smart-configuration'
+  'SMART_HEALTH_IT',
+  'SMART Health IT 測試沙盒',
+  'https://launch.smarthealthit.org/v/r4/fhir',
+  'https://launch.smarthealthit.org/v/r4/fhir/.well-known/smart-configuration'
 );
 ```
 
-* **測試流程**：開發團隊在 Logica 後台建立虛擬病患與其就診、用藥紀錄（`MedicationRequest`）。iOS App 透過中台查詢 `LOGICA_DEMO_HOSPITAL` 路由後，可直連該雲端沙盒完成完整的標準 SMART 登入授權並拉回真實的 FHIR 數據。
+* **測試流程**：`make server` 啟動中台 → iOS App 點選「SMART Health IT 測試沙盒」→ 點「連結此醫院帳號」→ Safari 跳出授權頁並選取測試 Patient → Token 自動鎖入 Keychain → 顯示「已完成授權」。
 
 ---
 
@@ -183,4 +183,4 @@ VALUES (
    大醫院的防火牆阻力極高。本 MVP 巧妙地利用「軌道一（離線建檔）」結合「軌道三（iPad 虛擬櫃檯）」作為破冰船。商務談判現場無須串接醫院系統，只需用兩台行動裝置即可完美演示「0.1 秒掃碼、地端立即生成醫學中心級標準 FHIR 格式」的閉環流程。證明在「完全不用改對外防火牆、不開放寫入 API」的前提下即可為醫院帶來排隊減流成效。
 
 3. **萬用插座的平台規模化（Scalability）與對接國際實力**：
-   由於前端、中台、醫院模擬端與外部測試環境完全基於國際標準 SMART on FHIR 與台灣 TW Core IG 規範，App 不需要為個別醫院進行客製化開發（Hardcoding）。不論是測試階段的國際 Logica 沙盒，還是未來真實導入推動 FHIR 的醫學中心，中台只需更新一列資料庫路由配置，App 即可瞬間動態解鎖，具備極高的平台擴張性。
+   由於前端、中台、醫院模擬端與外部測試環境完全基於國際標準 SMART on FHIR 與台灣 TW Core IG 規範，App 不需要為個別醫院進行客製化開發（Hardcoding）。不論是測試階段的 SMART Health IT 公用沙盒，還是未來真實導入推動 FHIR 的醫學中心，中台只需更新一列資料庫路由配置，App 即可瞬間動態解鎖，具備極高的平台擴張性。
