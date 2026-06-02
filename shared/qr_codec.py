@@ -23,7 +23,12 @@ class PatientData:
 def decode(payload: str) -> PatientData:
     """Base64 → zlib 解壓縮 → PatientData"""
     try:
-        compact = zlib.decompress(base64.b64decode(payload)).decode("utf-8")
+        raw = base64.b64decode(payload)
+        try:
+            compact = zlib.decompress(raw).decode("utf-8")
+        except zlib.error:
+            # 相容 iOS NSData.compressed(using: .zlib) 的 raw deflate 格式
+            compact = zlib.decompress(raw, -15).decode("utf-8")
     except Exception as e:
         raise ValueError(f"解碼失敗: {e}")
 
@@ -74,7 +79,7 @@ def to_tw_core_patient(data: PatientData) -> dict:
                 "value": data.id_number,
             }
         ],
-        "name": [{"use": "official", "text": data.name}],
+        "name": [{"use": "official", "text": data.name, "family": data.name[0], "given": [data.name[1:]]}],
         "gender": data.gender,
         "birthDate": data.birthday.strftime("%Y-%m-%d"),
         "telecom": [

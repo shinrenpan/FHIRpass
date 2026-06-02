@@ -30,14 +30,14 @@ async def _seed():
         if result.scalars().first() is not None:
             return
 
+        # sim config: t[0]=3 patient-standalone, t[4]=0 不跳過病患登入, t[15]=1 pkce=auto
+        _sim = "WzMsIiIsIiIsIkFVVE8iLDAsMCwwLCIiLCIiLCIiLCIiLCIiLCIiLCIiLDAsMSwiIl0"
+        _base = f"http://localhost:9091/v/r4/sim/{_sim}/fhir"
         db.add(HospitalRouting(
             fhir_id="DEV_SANDBOX",
             hospital_name="本地開發沙盒",
-            fhir_base_url="http://localhost:9090/fhir",
-            smart_well_known_url=(
-                "http://localhost:9090/fhir"
-                "/.well-known/smart-configuration"
-            ),
+            fhir_base_url=_base,
+            smart_well_known_url=f"{_base}/.well-known/smart-configuration",
             is_active=True,
         ))
         await db.commit()

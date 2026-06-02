@@ -27,15 +27,16 @@
     * **線上預約掛號（寫入）**：解鎖成功後，App 取得 Access Token。用戶可在地端一鍵選擇科別與診別，由 App 直連醫院的 FHIR Gateway 發送 `POST /Appointment`，實現**在家遠端預約掛號**。
     * **病歷健康同步（讀取）**：看診結束後，App 可安全地透過 TLS 通道向醫院發送 `GET /MedicationRequest` 或 `GET /Observation`，將個人的用藥紀錄與檢驗報告同步回手機地端，建立個人健康生態系。
 
-### 軌道三：醫院櫃檯端掃碼模擬系統 (FHIRpass-Counter MVP)
+### 軌道三：醫院櫃檯端掃碼建檔系統 (FHIRpass-Counter)
 * **情境**：實機展示（Live Demo）或既有診所快速無痛導入方案。醫院無須動用龐大 IT 預算修改 HIS 核心，僅需在櫃檯配置一台連線至區網的 iPad/平板即可立即上線。
 * **醫院端 Web 前端 (iPad 瀏覽器)**：
     * 櫃檯人員開啟專屬 Web App，網頁將自動要求調用 iPad 的後置相機鏡頭作為「虛擬條碼掃描槍」。
     * 透過整合開源 JavaScript 掃碼庫（`html5-qrcode`），能對民眾出示的動態 QR Code 進行即時捕捉與高速解析，並將讀取到的緊湊編碼透過區網發送至地端 API。
-* **地端接收後端 (解碼與 HIS 模擬模組)**：
+* **地端接收後端 (解碼、去重與 FHIR 建檔)**：
     * 運行於醫院內部區網伺服器（Demo 時可於 Mac/PC 本地端運行 FastAPI）。
     * 負責接收緊湊字串，執行 Base64 解碼與 zlib 解壓縮，並將原生個資自動映射（Mapping）組裝成標準的 **TW Core IG Patient JSON**。
-    * **HIS 模擬展示**：網頁右側會立刻亮起成功綠燈，以高科技感的可視化表格（Table）與標準 FHIR 樹狀結構呈現該病患資料，模擬點擊「確認寫入」即可一秒完成初診建檔。
+    * **病患去重**：先以身分證號查詢 FHIR Server（`GET /Patient?identifier=...`）。若已存在，直接顯示既有病患資料與歷史預約，不重複建立。
+    * **真實 FHIR 寫入**：新病患確認後，直接 `POST /Patient` 至 FHIR Server，取得 FHIR ID，供後續軌道二 OAuth2 存取同一筆病歷，完成跨軌閉環。
 
 ---
 
@@ -46,29 +47,46 @@ sequenceDiagram
     participant iOS  as 📱 iOS App（民眾）
     participant Srv  as ☁️ 中台 Server
     participant Ctr  as 🖥️ Counter（iPad + 地端）
-    participant FHIR as 🏥 醫院 FHIR Gateway
+    participant HAPI as 🗄️ HAPI FHIR Server
+    participant Auth as 🔐 SMART Launcher（OAuth2）
 
-    Note over iOS,FHIR: 階段一：新病患現場初診建檔（軌道一 × 軌道三，中台完全不參與）
+    Note over iOS,Auth: 階段一：新病患現場初診建檔（軌道一 × 軌道三，中台完全不參與）
 
     iOS->>iOS: 填寫個資，SwiftData 地端加密儲存
     iOS->>iOS: 緊湊編碼 → 生成萬用醫療身分 QR Code
 
     Ctr->>iOS: iPad 相機掃描 QR Code
     Ctr->>Ctr: Base64 解碼 → 映射為 TW Core IG Patient JSON
-    Ctr-->>Ctr: 網頁即時渲染建檔結果（HIS 模擬寫入）
+    Ctr->>HAPI: GET /Patient?identifier=身分證號（去重查詢）
+    alt 既有病患
+        HAPI-->>Ctr: 回傳既有 Patient 資源
+        Ctr->>HAPI: GET /Appointment?patient={fhir_id}
+        HAPI-->>Ctr: 回傳歷史預約清單
+        Ctr-->>Ctr: 網頁顯示既有病患資料與預約
+    else 新病患
+        HAPI-->>Ctr: 404 查無資料
+        Ctr->>HAPI: POST /Patient（寫入 TW Core IG Patient）
+        HAPI-->>Ctr: 201 Created，回傳 fhir_id
+        Ctr-->>Ctr: 網頁顯示建檔成功 + FHIR ID
+    end
 
-    Note over iOS,FHIR: 階段二：複診線上服務（軌道二：SMART on FHIR）
+    Note over iOS,Auth: 階段二：複診線上服務（軌道二：SMART on FHIR）
 
     iOS->>Srv: GET /hospitals（查詢合作醫院路由表）
     Srv-->>iOS: 回傳 FHIR Base URL + SMART 端點設定
 
-    iOS->>FHIR: SMART on FHIR 授權（OAuth 2.0 + PKCE）
-    FHIR-->>iOS: Access Token 直回 App（不經中台）
+    iOS->>Auth: SMART on FHIR 授權（OAuth 2.0 + PKCE）
+    Auth-->>iOS: Access Token 直回 App（不經中台）
     iOS->>iOS: Token 強制鎖入 iOS Keychain
 
-    iOS->>FHIR: POST /Appointment（線上預約掛號）
-    iOS->>FHIR: GET /MedicationRequest（同步用藥紀錄）
-    FHIR-->>iOS: 標準 FHIR 資料 → 儲存於 SwiftData
+    iOS->>Auth: POST /Appointment（線上預約掛號，經 Launcher proxy）
+    Auth->>HAPI: 轉發請求（驗證 token）
+    HAPI-->>iOS: 201 Created
+    iOS->>Auth: GET /MedicationRequest（同步用藥紀錄）
+    Auth->>HAPI: 轉發請求
+    HAPI-->>iOS: 標準 FHIR 資料 → 儲存於 SwiftData
+
+    Note over Ctr,HAPI: 閉環驗證：Counter 掃碼可見 iOS App 已預約的 Appointment
 ```
 
 ---
@@ -148,35 +166,38 @@ CREATE TABLE hospital_routing (
 
 為確保開發效率與系統合規驗證，本 MVP 採取「本地封閉」與「國際雲端沙盒」雙軌測試環境配置：
 
-### 1. 軌道一與軌道三（離線建檔閉環）測試配置
-* **測試範疇**：自訂緊湊字串編碼、QR Code 實體讀取率、地端解碼與 TW Core IG 欄位映射機制。
-* **環境設定**：**完全不使用外部網路伺服器**。
-    * **民眾端**：iOS App 運行於實機（iPhone），生成動態 QR Code。
-    * **櫃檯端**：iPad 連接與開發筆電（Mac/PC）相同的本地 Wi-Fi 區網，開啟 Web 掃碼網頁。
-    * **解碼端**：開發筆電本地運行 FastAPI 服務，接收 iPad 區網 POST 請求並進行還原，完全模擬醫院防火牆內的獨立運作流。
+### 端對端 Live Demo 流程（三軌閉環）
 
-### 2. 軌道二（SMART on FHIR 線上授權）測試配置
-* **測試範疇**：完整驗證「QR 建檔（軌道一）→ OAuth2 存取同一份病歷（軌道二）」全程閉環。
-* **環境設定**：本地 SMART Dev Sandbox（SMART Health IT 官方 Docker image，HAPI FHIR + OAuth2 Launcher 一體），`make sandbox` 啟動。
-* **測試數據初始化範例**：Server 首次啟動自動 seed：
+**啟動環境**：
 
-```sql
-INSERT INTO hospital_routing (fhir_id, hospital_name, fhir_base_url, smart_well_known_url)
-VALUES (
-  'DEV_SANDBOX',
-  '本地開發沙盒',
-  'http://localhost:9090/fhir',
-  'http://localhost:9090/fhir/.well-known/smart-configuration'
-);
+```bash
+make sandbox   # 啟動 HAPI FHIR (9090) + SMART Launcher (9091)，等待完全就緒
+make dev       # 同時啟動中台 (8000) + Counter (8001)
 ```
 
-* **完整測試流程**：
+**軌道三：Counter 現場建檔**
 
-```
-軌道一：Counter 掃 QR → 解碼病人資料 → POST Patient 到本地沙盒 → 取得 FHIR Patient ID
-軌道二：iOS App OAuth2 → Launcher 列出沙盒 Patient（含剛建的）→ 選取 → token.patient = 該 ID
-        → iOS App 呼叫 FHIR API → 讀取同一筆病歷
-```
+1. 瀏覽器（或 iPad）開啟 `https://localhost:8001`
+2. 點擊掃碼區域啟動相機，掃描 iOS App QR Code
+3. Counter 自動搜尋 HAPI（以身分證號 `GET /Patient?identifier=...`）
+   - **新病患**：顯示解碼資料（姓名、生日、性別）→ 點「確認建檔」→ `POST /Patient` 寫入 HAPI → 取得 FHIR Patient ID
+   - **既有病患**：直接顯示病患資料與歷史預約，不重複建立
+
+**軌道二：iOS App OAuth2 授權**
+
+4. iOS App → Hospitals Tab → 「本地開發沙盒」→「連結此醫院帳號」
+5. Launcher 彈出 **Patient Login** → 下拉選取病患（剛建檔那筆）→ 輸入任意密碼 → Login
+6. Scope 授權確認頁 → Allow → 授權成功，token 帶 `patient = FHIR ID`
+7. iOS App 點「同步健康紀錄」或「線上預約掛號」操作 FHIR API
+
+**閉環驗證（可選加碼）**
+
+8. iOS App 完成「線上預約掛號」→ Appointment 寫入 HAPI
+9. Counter 重新掃同一張 QR Code → 搜尋到既有病患 → 顯示剛預約的記錄
+
+**重設**：`make sandbox-reset`（清除所有 HAPI 資料 + server DB，從頭再跑）
+
+> `localhost` URL 僅適用 iOS Simulator。實機測試需改為 Mac 區網 IP（`ipconfig getifaddr en0`）。
 
 ---
 
@@ -186,7 +207,7 @@ VALUES (
    中台 Server 採取「無狀態（Stateless）」架構，完全不經手、不留存任何醫療隱私與個資，所有敏感憑證均鎖在 iOS 硬件級的 Keychain 中。這讓產品在《個人資料保護法》與衛福部資安稽核面前立於不敗之地，合規成本與法律責任趨近於零。
 
 2. **切入市場的特洛伊木馬（Go-To-Market）與極速 Live Demo**：
-   大醫院的防火牆阻力極高。本 MVP 巧妙地利用「軌道一（離線建檔）」結合「軌道三（iPad 虛擬櫃檯）」作為破冰船。商務談判現場無須串接醫院系統，只需用兩台行動裝置即可完美演示「0.1 秒掃碼、地端立即生成醫學中心級標準 FHIR 格式」的閉環流程。證明在「完全不用改對外防火牆、不開放寫入 API」的前提下即可為醫院帶來排隊減流成效。
+   大醫院的防火牆阻力極高。本 MVP 巧妙地利用「軌道一（離線建檔）」結合「軌道三（iPad 虛擬櫃檯）」作為破冰船。商務談判現場無須串接醫院系統，只需用兩台行動裝置即可完美演示「0.1 秒掃碼 → 真實 FHIR 建檔 → iOS App OAuth2 讀取同一筆病歷」的完整閉環流程。不只是模擬，而是真實標準 FHIR 資料流；且在「完全不用改對外防火牆、不開放寫入 API」的前提下即可為醫院帶來排隊減流成效。
 
 3. **萬用插座的平台規模化（Scalability）與對接國際實力**：
    由於前端、中台、醫院模擬端與外部測試環境完全基於國際標準 SMART on FHIR 與台灣 TW Core IG 規範，App 不需要為個別醫院進行客製化開發（Hardcoding）。不論是測試階段的 SMART Health IT 公用沙盒，還是未來真實導入推動 FHIR 的醫學中心，中台只需更新一列資料庫路由配置，App 即可瞬間動態解鎖，具備極高的平台擴張性。
