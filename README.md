@@ -126,7 +126,9 @@ sequenceDiagram
   "name": [
     {
       "use": "official",
-      "text": "陳小明"
+      "text": "陳小明",
+      "family": "陳",
+      "given": ["小明"]
     }
   ],
   "gender": "male",
@@ -188,12 +190,13 @@ make dev       # 同時啟動中台 (8000) + Counter (8001)
 4. iOS App → Hospitals Tab → 「本地開發沙盒」→「連結此醫院帳號」
 5. Launcher 彈出 **Patient Login** → 下拉選取病患（剛建檔那筆）→ 輸入任意密碼 → Login
 6. Scope 授權確認頁 → Allow → 授權成功，token 帶 `patient = FHIR ID`
-7. iOS App 點「同步健康紀錄」或「線上預約掛號」操作 FHIR API
+7. iOS App 點「線上預約掛號」→ `POST /Appointment`（status: proposed）→ 頁面自動顯示預約清單
 
 **閉環驗證（可選加碼）**
 
-8. iOS App 完成「線上預約掛號」→ Appointment 寫入 HAPI
-9. Counter 重新掃同一張 QR Code → 搜尋到既有病患 → 顯示剛預約的記錄
+8. Counter 重新掃同一張 QR Code → 搜尋到既有病患 → 顯示剛建立的預約（狀態：待確認）
+9. Counter 點「✓ 確認」→ `PATCH /appointments/{id}/confirm` → HAPI 更新為 booked
+10. iOS App 下拉重新整理 → 預約狀態從「待確認」變為「已確認」
 
 **重設**：`make sandbox-reset`（清除所有 HAPI 資料 + server DB，從頭再跑）
 
