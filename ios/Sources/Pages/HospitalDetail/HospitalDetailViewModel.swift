@@ -139,6 +139,7 @@ private extension HospitalDetailViewModel {
     do {
       try await fhirMakeAppointment(accessToken: token, patientFhirID: patientFhirID, patientIdNumber: idNumber)
       state.api.makeAppointment = .success
+      await loadAppointments()
     } catch {
       state.api.makeAppointment = .error(error.localizedDescription)
     }
