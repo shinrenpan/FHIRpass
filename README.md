@@ -164,6 +164,68 @@ CREATE TABLE hospital_routing (
 
 ---
 
+## 🔐 授權模式設計考量 (Authorization Mode Design)
+
+### 現實背景：台灣醫療 IT 現況
+
+本 MVP 實作了完整的 **SMART on FHIR（OAuth2 + PKCE）**授權流程。然而根據實地調研，台灣醫療機構在 FHIR 導入上呈現明顯的兩極分布：
+
+| 類型 | 占比（概估） | 授權能力 |
+|------|------------|---------|
+| 大型醫學中心（NTU、VGHTPE 等先進試點） | 少數 | 可能具備自建 OAuth2，部分朝 SMART on FHIR 標準推進 |
+| 一般區域醫院 / 診所 | 多數 | FHIR Server 已建置，但授權層僅提供靜態 Bearer Token（人工申請，無 `/authorize` 端點） |
+
+這意味著，若直接以現行 SMART on FHIR 實作對接多數台灣醫院，**技術上無法完成 OAuth2 握手**。
+
+---
+
+### 兩種授權模式的取捨分析
+
+#### 模式 A：SMART on FHIR（OAuth2 + PKCE）— 現行實作
+
+```
+iOS App → ASWebAuthenticationSession → 醫院 /authorize → 醫院 /token → Access Token
+```
+
+| 面向 | 說明 |
+|------|------|
+| ✅ 安全性 | 標準 OAuth2 + PKCE，Token 具時效性，不需儲存帳密，符合零信任原則 |
+| ✅ 病患主控 | Token 帶有 `patient` claim，授權範圍由病患當下同意決定 |
+| ✅ 國際標準 | 符合 HL7 SMART on FHIR 規範，可直接對接通過認證的醫療雲端平台 |
+| ✅ 稽核追蹤 | 醫院端可精確記錄「誰、何時、授權存取什麼範圍」 |
+| ❌ 醫院端建置成本高 | 需實作授權伺服器（Authorization Server），台灣多數醫院尚未具備 |
+| ❌ 推廣阻力大 | IT 部門需評估、測試、上線新的 OAuth2 基礎設施 |
+
+#### 模式 B：靜態 Bearer Token — 待實作，對應台灣現況
+
+```
+iOS App → 使用者手動輸入 Token（或掃描 Token QR Code）→ 儲存 Keychain → 直接呼叫 FHIR API
+```
+
+| 面向 | 說明 |
+|------|------|
+| ✅ 醫院零建置成本 | 只需在現有 FHIR Server 開一組 API Key，無需 OAuth 基礎設施 |
+| ✅ 導入速度快 | 醫院 IT 同仁可在一天內完成對接，推廣阻力極低 |
+| ❌ 安全性較弱 | Token 長期有效、無使用者粒度，等同帳戶級別存取 |
+| ❌ 無病患主控授權 | 無 scope 機制，Token 通常為系統層級（Admin / 院內系統角色） |
+| ❌ Token 輪換成本 | 過期或洩漏時需人工換發，無法自動更新 |
+
+---
+
+### 架構預留的彈性
+
+本系統在設計上已預留雙模式切換的空間，**不需修改任何 FHIR API 呼叫層或 UI 層**：
+
+```
+中台路由表（hospital_routing）
+  ├── smart_well_known_url 有值 → 走模式 A（SMART on FHIR）
+  └── smart_well_known_url 為空 → 走模式 B（提示手動輸入 Token）
+```
+
+這使得同一個 App 可以依照各醫院的技術成熟度，在兩種模式間無感切換，兼顧**立即可落地性**（對接靜態 Token 醫院）與**長期合規演進路徑**（隨醫院升級至 SMART on FHIR）。
+
+---
+
 ## 🧪 研發與測試環境規範 (MVP Sandbox Specification)
 
 為確保開發效率與系統合規驗證，本 MVP 採取「本地封閉」與「國際雲端沙盒」雙軌測試環境配置：
