@@ -117,7 +117,8 @@ sim = [3,"","","AUTO",0,0,0,"","","","","","","",0,1,""]
 |------|---------|------|
 | iOS QR zlib 格式 | `shared/qr_codec.py` | `NSData.compressed(using: .zlib)` 可能產生 raw deflate，加 `wbits=-15` fallback |
 | SMART `aud` 參數 | `ios/Sources/Shared/SMARTAuth.swift` | SMART 規格必要欄位，授權 URL 需帶 `aud=fhirBaseURL` |
-| Launcher 病患姓名空白 | `shared/qr_codec.py` | Launcher 需 `name.family`/`name.given`，TW Core IG 只有 `name.text` 不夠 |
+| Launcher 病患姓名空白 | `shared/qr_codec.py` | Launcher 需 `name.family`/`name.given`，TW Core IG 只有 `name.text` 不夠；以 `name[:1]`/`name[1:]` 切分，單字姓名不 crash |
+| FHIR identifier 查詢字元 | `HospitalDetailViewModel+APIs.swift` | `identifier=http://moi.gov.tw\|{id}` 中的 `\|` 需 percent-encode；改用 `URLComponents` 自動處理 |
 
 ## 中台資料庫
 SQLite（MVP），只存醫院路由表，**不存任何個資**。
