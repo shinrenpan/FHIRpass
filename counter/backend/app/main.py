@@ -143,6 +143,39 @@ async def get_appointments(fhir_id: str):
     return AppointmentsResponse(appointments=appointments)
 
 
+@app.patch("/appointments/{appt_id}/confirm")
+async def confirm_appointment(appt_id: str):
+    try:
+        async with httpx.AsyncClient(timeout=10) as client:
+            get_res = await client.get(
+                f"{FHIR_SERVER_URL}/Appointment/{appt_id}",
+                headers={"Accept": "application/fhir+json"},
+            )
+    except (httpx.ConnectError, httpx.TimeoutException):
+        raise HTTPException(status_code=502, detail="無法連線至 FHIR Server")
+
+    if get_res.status_code != 200:
+        raise HTTPException(status_code=404, detail="找不到此預約")
+
+    appt = get_res.json()
+    appt["status"] = "booked"
+
+    try:
+        async with httpx.AsyncClient(timeout=10) as client:
+            put_res = await client.put(
+                f"{FHIR_SERVER_URL}/Appointment/{appt_id}",
+                json=appt,
+                headers={"Content-Type": "application/fhir+json"},
+            )
+    except (httpx.ConnectError, httpx.TimeoutException):
+        raise HTTPException(status_code=502, detail="無法連線至 FHIR Server")
+
+    if not (200 <= put_res.status_code < 300):
+        raise HTTPException(status_code=502, detail=f"FHIR Server 更新失敗（{put_res.status_code}）")
+
+    return {"status": "booked"}
+
+
 @app.get("/health")
 def health():
     return {"status": "ok"}

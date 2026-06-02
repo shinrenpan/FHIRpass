@@ -31,9 +31,29 @@ struct HospitalDetailView: View {
             action: .syncHealthRecordsTap
           )
         }
+
+        Section("我的預約") {
+          if viewModel.state.appointmentsLoading {
+            HStack {
+              ProgressView()
+              Text("載入中…").foregroundStyle(.secondary)
+            }
+          } else if viewModel.state.appointments.isEmpty {
+            Text("尚無預約記錄")
+              .foregroundStyle(.secondary)
+              .font(.caption)
+          } else {
+            ForEach(viewModel.state.appointments) { appt in
+              appointmentRow(appt)
+            }
+          }
+        }
       }
     }
     .navigationTitle(viewModel.state.hospital.name)
+    .refreshable {
+      await viewModel.doAction(.view(.refreshAppointmentsTap))
+    }
     .task {
       await viewModel.doAction(.view(.isFirstAppear))
     }
@@ -83,6 +103,30 @@ private extension HospitalDetailView {
         }
         .font(.caption)
       }
+    }
+  }
+
+  func appointmentRow(_ appt: HospitalDetailViewModel.Appointment) -> some View {
+    HStack {
+      VStack(alignment: .leading, spacing: 2) {
+        if let start = appt.start {
+          Text(start, format: .dateTime.month().day().hour().minute())
+            .font(.subheadline)
+        }
+        if !appt.description.isEmpty {
+          Text(appt.description)
+            .font(.caption)
+            .foregroundStyle(.secondary)
+        }
+      }
+      Spacer()
+      Text(appt.statusDisplayName)
+        .font(.caption)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 3)
+        .background(appt.status == "booked" ? Color.blue.opacity(0.12) : Color.orange.opacity(0.12))
+        .foregroundStyle(appt.status == "booked" ? .blue : .orange)
+        .clipShape(Capsule())
     }
   }
 

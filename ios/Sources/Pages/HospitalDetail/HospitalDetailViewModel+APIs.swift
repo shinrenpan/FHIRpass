@@ -13,7 +13,7 @@ extension HospitalDetailViewModel {
     let end = formatter.string(from: Date().addingTimeInterval(1800))
     let body: [String: Any] = [
       "resourceType": "Appointment",
-      "status": "booked",
+      "status": "proposed",
       "start": now,
       "end": end,
       "participant": [[
@@ -44,6 +44,28 @@ extension HospitalDetailViewModel {
     let (data, _) = try await URLSession.shared.data(for: request)
     let bundle = try JSONSerialization.jsonObject(with: data) as? [String: Any]
     return (bundle?["entry"] as? [[String: Any]])?.count ?? 0
+  }
+
+  func fhirFetchAppointments(accessToken: String, patientFhirID: String?, patientIdNumber: String) async throws -> [Appointment] {
+    let resolvedID = try await resolvePatientID(accessToken: accessToken, patientFhirID: patientFhirID, idNumber: patientIdNumber)
+    guard let url = URL(string: "\(state.hospital.fhirBaseURL)/Appointment?patient=\(resolvedID)") else {
+      throw APIError.message("Invalid FHIR URL")
+    }
+    var request = URLRequest(url: url)
+    request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
+    request.setValue("application/fhir+json", forHTTPHeaderField: "Accept")
+    let (data, _) = try await URLSession.shared.data(for: request)
+    let bundle = try JSONSerialization.jsonObject(with: data) as? [String: Any]
+    let entries = (bundle?["entry"] as? [[String: Any]]) ?? []
+    let iso = ISO8601DateFormatter()
+    return entries.compactMap { entry -> Appointment? in
+      guard let resource = entry["resource"] as? [String: Any],
+            let id = resource["id"] as? String,
+            let status = resource["status"] as? String else { return nil }
+      let start = (resource["start"] as? String).flatMap { iso.date(from: $0) }
+      let desc = resource["description"] as? String ?? ""
+      return Appointment(id: id, status: status, start: start, description: desc)
+    }
   }
 
   // 優先用 OAuth patient context，fallback 到台灣身分證搜尋

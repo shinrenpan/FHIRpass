@@ -147,6 +147,14 @@
     .appt-empty {
       font-size: 0.85rem; color: #9ca3af; text-align: center; padding: 12px 0;
     }
+    .confirm-appt-btn {
+      margin-left: auto; display: block; margin-top: 6px;
+      padding: 4px 12px; border: none; border-radius: 6px;
+      background: #16a34a; color: white; font-size: 0.8rem;
+      font-weight: 600; cursor: pointer;
+    }
+    .confirm-appt-btn:hover { background: #15803d; }
+    .confirm-appt-btn:disabled { background: #9ca3af; cursor: not-allowed; }
 
     /* 按鈕 */
     .action-row { display: flex; flex-direction: column; gap: 8px; }
@@ -432,15 +440,35 @@
       }
       list.innerHTML = data.appointments.map(a => {
         const statusCls = a.status || "pending";
-        const statusText = { booked: "已預約", proposed: "已預約", fulfilled: "已就診", cancelled: "已取消", pending: "待確認" }[a.status] ?? a.status;
+        const statusText = { booked: "已確認", proposed: "待確認", fulfilled: "已就診", cancelled: "已取消", pending: "待確認" }[a.status] ?? a.status;
         const dateStr = a.start ? new Date(a.start).toLocaleString("zh-TW", { month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }) : "—";
+        const confirmBtn = a.status === "proposed"
+          ? `<button class="confirm-appt-btn" onclick="confirmAppt('${a.id}', this)">✓ 確認</button>`
+          : "";
         return `<div class="appt-item">
           <span class="appt-status ${statusCls}">${statusText}</span>
           ${dateStr}${a.description ? "　" + a.description : ""}
+          ${confirmBtn}
         </div>`;
       }).join("");
     } catch {
       list.innerHTML = "<div class='appt-empty'>預約資料載入失敗</div>";
+    }
+  }
+
+  // ── 確認預約 ────────────────────────────────────────────
+
+  async function confirmAppt(apptId, btn) {
+    btn.disabled = true;
+    btn.textContent = "確認中…";
+    try {
+      const r = await fetch(`${BACKEND}/appointments/${apptId}/confirm`, { method: "PATCH" });
+      if (!r.ok) throw new Error("確認失敗");
+      await loadAppointments(currentFhirId);
+    } catch (e) {
+      btn.disabled = false;
+      btn.textContent = "✓ 確認";
+      showError("預約確認失敗：" + e.message);
     }
   }
 

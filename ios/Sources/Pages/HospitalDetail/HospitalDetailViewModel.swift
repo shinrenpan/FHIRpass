@@ -40,6 +40,7 @@ extension HospitalDetailViewModel {
     case authResult(Result<SMARTTokenResponse, Error>)
     case makeAppointmentTap
     case syncHealthRecordsTap
+    case refreshAppointmentsTap
   }
 
   private func handleViewAction(_ action: ViewAction) async {
@@ -48,6 +49,7 @@ extension HospitalDetailViewModel {
       guard state.isFirstAppear else { return }
       state.isFirstAppear = false
       restoreToken()
+      if state.authStatus.isConnected { await loadAppointments() }
 
     case .connectTap:
       await startSMARTAuth()
@@ -67,6 +69,7 @@ extension HospitalDetailViewModel {
         accessToken: tokenResponse.access_token,
         patientFhirID: tokenResponse.patient
       )
+      await loadAppointments()
 
     case let .authResult(.failure(error)):
       state.authStatus = .error(error.localizedDescription)
@@ -76,6 +79,9 @@ extension HospitalDetailViewModel {
 
     case .syncHealthRecordsTap:
       await handleSyncRecords()
+
+    case .refreshAppointmentsTap:
+      await loadAppointments()
     }
   }
 }
@@ -153,6 +159,18 @@ private extension HospitalDetailViewModel {
     } catch {
       state.api.syncRecords = .error(error.localizedDescription)
     }
+  }
+
+  func loadAppointments() async {
+    guard let token = state.authStatus.accessToken else { return }
+    state.appointmentsLoading = true
+    defer { state.appointmentsLoading = false }
+    let idNumber = patientIdNumber() ?? ""
+    state.appointments = (try? await fhirFetchAppointments(
+      accessToken: token,
+      patientFhirID: state.authStatus.patientFhirID,
+      patientIdNumber: idNumber
+    )) ?? []
   }
 
   func patientIdNumber() -> String? {

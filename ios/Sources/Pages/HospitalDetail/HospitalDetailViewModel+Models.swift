@@ -8,6 +8,8 @@ extension HospitalDetailViewModel {
     var hospital: Hospital
     var authStatus: AuthStatus = .notConnected
     var api: API = .init()
+    var appointments: [Appointment] = []
+    var appointmentsLoading = false
   }
 
   struct API: Sendable {
@@ -41,6 +43,23 @@ extension HospitalDetailViewModel {
 // MARK: - Domain Models
 
 extension HospitalDetailViewModel {
+  struct Appointment: Sendable, Identifiable {
+    let id: String
+    let status: String
+    let start: Date?
+    let description: String
+
+    var statusDisplayName: String {
+      switch status {
+      case "booked":    return "已確認"
+      case "proposed":  return "待確認"
+      case "fulfilled": return "已就診"
+      case "cancelled": return "已取消"
+      default:          return status
+      }
+    }
+  }
+
   struct Hospital: Sendable {
     let id: String
     let name: String
