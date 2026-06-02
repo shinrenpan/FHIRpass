@@ -104,10 +104,13 @@ async def search_patient(identifier: str = Query(..., description="台灣身分�
                 params={"identifier": identifier},
                 headers={"Accept": "application/fhir+json"},
             )
-    except httpx.ConnectError:
+    except (httpx.ConnectError, httpx.TimeoutException):
         raise HTTPException(status_code=502, detail="無法連線至 FHIR Server")
 
-    entries = res.json().get("entry", [])
+    try:
+        entries = res.json().get("entry", [])
+    except Exception:
+        raise HTTPException(status_code=502, detail=f"FHIR Server 回應異常（{res.status_code}）")
     if not entries:
         raise HTTPException(status_code=404, detail="找不到此病患")
 

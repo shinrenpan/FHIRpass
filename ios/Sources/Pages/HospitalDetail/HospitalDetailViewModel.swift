@@ -108,6 +108,7 @@ private extension HospitalDetailViewModel {
       let (verifier, challenge) = SMARTAuth.generatePKCE()
       guard let authURL = SMARTAuth.authorizationURL(
         config: config,
+        aud: state.hospital.fhirBaseURL,
         codeChallenge: challenge,
         state: UUID().uuidString
       ) else {

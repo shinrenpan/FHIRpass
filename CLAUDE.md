@@ -65,24 +65,59 @@ FHIRpass/
 | `hapiproject/hapi` + TW Core IG | 醫院 FHIR Server | `http://localhost:9090/fhir` |
 | `smartonfhir/smart-launcher-2` | OAuth2 + FHIR Proxy | `http://localhost:9091` |
 
-iOS App 連接的 FHIR base URL 是 Launcher proxy：`http://localhost:9091/v/r4/fhir`
+iOS App 連接的 FHIR base URL 是 Launcher proxy，並帶有 sim config：
 
 ```
-軌道一：Counter 掃 QR
-  → 解碼病人資料
-  → POST Patient 到 http://localhost:9090/fhir/Patient
-  → 取得 Patient FHIR ID
-
-軌道二：iOS App OAuth2 登入（經 Launcher port 9091）
-  → Launcher 列出沙盒內所有 Patient（含剛 POST 的）
-  → 病患選取自己 → token.patient = 該 FHIR ID
-  → 呼叫 FHIR API 讀取同一筆病歷
+http://localhost:9091/v/r4/sim/{sim}/fhir
 ```
+
+### SMART Launcher Sim Config
+
+Launcher 透過 URL 路徑中的 Base64 sim config 決定授權流程。`server/app/main.py` seed 中使用：
+
+```
+sim = [3,"","","AUTO",0,0,0,"","","","","","","",0,1,""]
+```
+
+各欄位說明（關鍵欄位）：
+- `t[0] = 3` → `patient-standalone`（病患直接授權，不需醫護人員登入）
+- `t[1] = ""` → 顯示 Patient picker，讓病患自選
+- `t[4] = 0` → `skip_login = false`（顯示登入/選取步驟）
+- `t[5] = 0` → `skip_auth = false`（顯示 scope 確認頁）
+- `t[15] = 1` → `pkce = auto`
+
+> 若改為 `t[0] = 2`（provider-standalone）會顯示 Practitioner Login 且因無醫護資料而卡住。
+
+### 端對端 Demo 流程
+
+**準備**：`make sandbox`（等 HAPI 完全啟動後再繼續）→ `make dev`
+
+**軌道三：Counter 建檔**
+1. 瀏覽器開 `https://localhost:8001`
+2. 掃描 iOS App QR Code → Counter 以身分證號搜尋 HAPI
+3. 新病患：顯示解碼結果 → 點「確認建檔」→ `POST /Patient` 寫入 HAPI → 取得 FHIR ID
+
+**軌道二：iOS OAuth2 授權**
+4. iOS App → Hospitals Tab → 本地開發沙盒 → 連結此醫院帳號
+5. Launcher 彈出 Patient Login → 下拉選取病患（即剛建檔的那筆）→ 輸入任意密碼 → Login
+6. Scope 確認頁 → Allow → 授權成功，token 帶 `patient = FHIR ID`
+
+**閉環驗證（可選）**
+7. iOS App 點「線上預約掛號」→ 寫入 Appointment 至 HAPI
+8. Counter 重新掃碼 → 搜尋到既有病患 → 顯示剛寫入的預約記錄
+
+**重設**：`make sandbox-reset`（清除所有 HAPI 資料 + server DB，從頭再跑）
 
 > seed URL 使用 `localhost`，僅適用於 iOS Simulator。
 > 實機測試需將 `localhost` 改為 Mac 區網 IP（`ipconfig getifaddr en0`）。
 
-seed 變更後需重設：`make sandbox-reset`（清除 Docker volume + `server/fhirpass.db`）
+### 已知相容性修正
+
+| 問題 | 修正位置 | 說明 |
+|------|---------|------|
+| iOS QR zlib 格式 | `shared/qr_codec.py` | `NSData.compressed(using: .zlib)` 可能產生 raw deflate，加 `wbits=-15` fallback |
+| SMART `aud` 參數 | `ios/Sources/Shared/SMARTAuth.swift` | SMART 規格必要欄位，授權 URL 需帶 `aud=fhirBaseURL` |
+| Launcher 病患姓名空白 | `shared/qr_codec.py` | Launcher 需 `name.family`/`name.given`，TW Core IG 只有 `name.text` 不夠 |
 
 ## 中台資料庫
 SQLite（MVP），只存醫院路由表，**不存任何個資**。

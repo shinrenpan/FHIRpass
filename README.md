@@ -166,35 +166,38 @@ CREATE TABLE hospital_routing (
 
 為確保開發效率與系統合規驗證，本 MVP 採取「本地封閉」與「國際雲端沙盒」雙軌測試環境配置：
 
-### 1. 軌道一與軌道三（離線建檔閉環）測試配置
-* **測試範疇**：自訂緊湊字串編碼、QR Code 實體讀取率、地端解碼與 TW Core IG 欄位映射機制。
-* **環境設定**：**完全不使用外部網路伺服器**。
-    * **民眾端**：iOS App 運行於實機（iPhone），生成動態 QR Code。
-    * **櫃檯端**：iPad 連接與開發筆電（Mac/PC）相同的本地 Wi-Fi 區網，開啟 Web 掃碼網頁。
-    * **解碼端**：開發筆電本地運行 FastAPI 服務，接收 iPad 區網 POST 請求並進行還原，完全模擬醫院防火牆內的獨立運作流。
+### 端對端 Live Demo 流程（三軌閉環）
 
-### 2. 軌道二（SMART on FHIR 線上授權）測試配置
-* **測試範疇**：完整驗證「QR 建檔（軌道一）→ OAuth2 存取同一份病歷（軌道二）」全程閉環。
-* **環境設定**：本地 SMART Dev Sandbox（SMART Health IT 官方 Docker image，HAPI FHIR + OAuth2 Launcher 一體），`make sandbox` 啟動。
-* **測試數據初始化範例**：Server 首次啟動自動 seed：
+**啟動環境**：
 
-```sql
-INSERT INTO hospital_routing (fhir_id, hospital_name, fhir_base_url, smart_well_known_url)
-VALUES (
-  'DEV_SANDBOX',
-  '本地開發沙盒',
-  'http://localhost:9091/v/r4/fhir',
-  'http://localhost:9091/v/r4/fhir/.well-known/smart-configuration'
-);
+```bash
+make sandbox   # 啟動 HAPI FHIR (9090) + SMART Launcher (9091)，等待完全就緒
+make dev       # 同時啟動中台 (8000) + Counter (8001)
 ```
 
-* **完整測試流程**：
+**軌道三：Counter 現場建檔**
 
-```
-軌道一：Counter 掃 QR → 解碼病人資料 → POST Patient 到本地沙盒 → 取得 FHIR Patient ID
-軌道二：iOS App OAuth2 → Launcher 列出沙盒 Patient（含剛建的）→ 選取 → token.patient = 該 ID
-        → iOS App 呼叫 FHIR API → 讀取同一筆病歷
-```
+1. 瀏覽器（或 iPad）開啟 `https://localhost:8001`
+2. 點擊掃碼區域啟動相機，掃描 iOS App QR Code
+3. Counter 自動搜尋 HAPI（以身分證號 `GET /Patient?identifier=...`）
+   - **新病患**：顯示解碼資料（姓名、生日、性別）→ 點「確認建檔」→ `POST /Patient` 寫入 HAPI → 取得 FHIR Patient ID
+   - **既有病患**：直接顯示病患資料與歷史預約，不重複建立
+
+**軌道二：iOS App OAuth2 授權**
+
+4. iOS App → Hospitals Tab → 「本地開發沙盒」→「連結此醫院帳號」
+5. Launcher 彈出 **Patient Login** → 下拉選取病患（剛建檔那筆）→ 輸入任意密碼 → Login
+6. Scope 授權確認頁 → Allow → 授權成功，token 帶 `patient = FHIR ID`
+7. iOS App 點「同步健康紀錄」或「線上預約掛號」操作 FHIR API
+
+**閉環驗證（可選加碼）**
+
+8. iOS App 完成「線上預約掛號」→ Appointment 寫入 HAPI
+9. Counter 重新掃同一張 QR Code → 搜尋到既有病患 → 顯示剛預約的記錄
+
+**重設**：`make sandbox-reset`（清除所有 HAPI 資料 + server DB，從頭再跑）
+
+> `localhost` URL 僅適用 iOS Simulator。實機測試需改為 Mac 區網 IP（`ipconfig getifaddr en0`）。
 
 ---
 
