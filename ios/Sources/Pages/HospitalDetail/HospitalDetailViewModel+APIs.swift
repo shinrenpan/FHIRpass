@@ -13,7 +13,7 @@ extension HospitalDetailViewModel {
     let end = formatter.string(from: Date().addingTimeInterval(1800))
     let body: [String: Any] = [
       "resourceType": "Appointment",
-      "status": "proposed",
+      "status": "booked",
       "start": now,
       "end": end,
       "participant": [[

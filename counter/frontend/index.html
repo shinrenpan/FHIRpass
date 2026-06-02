@@ -140,6 +140,7 @@
       padding: 2px 7px; border-radius: 10px; margin-right: 6px;
     }
     .appt-status.booked    { background: #dbeafe; color: #1d4ed8; }
+    .appt-status.proposed  { background: #dbeafe; color: #1d4ed8; }
     .appt-status.fulfilled { background: #dcfce7; color: #15803d; }
     .appt-status.cancelled { background: #fee2e2; color: #dc2626; }
     .appt-status.pending   { background: #fefce8; color: #92400e; }
@@ -431,7 +432,7 @@
       }
       list.innerHTML = data.appointments.map(a => {
         const statusCls = a.status || "pending";
-        const statusText = { booked: "已預約", fulfilled: "已就診", cancelled: "已取消", pending: "待確認" }[a.status] ?? a.status;
+        const statusText = { booked: "已預約", proposed: "已預約", fulfilled: "已就診", cancelled: "已取消", pending: "待確認" }[a.status] ?? a.status;
         const dateStr = a.start ? new Date(a.start).toLocaleString("zh-TW", { month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" }) : "—";
         return `<div class="appt-item">
           <span class="appt-status ${statusCls}">${statusText}</span>
