@@ -71,7 +71,9 @@ extension HospitalDetailViewModel {
   // 優先用 OAuth patient context，fallback 到台灣身分證搜尋
   private func resolvePatientID(accessToken: String, patientFhirID: String?, idNumber: String) async throws -> String {
     if let id = patientFhirID { return id }
-    guard let url = URL(string: "\(state.hospital.fhirBaseURL)/Patient?identifier=http://moi.gov.tw|\(idNumber)") else {
+    var components = URLComponents(string: "\(state.hospital.fhirBaseURL)/Patient")
+    components?.queryItems = [URLQueryItem(name: "identifier", value: "http://moi.gov.tw|\(idNumber)")]
+    guard let url = components?.url else {
       throw APIError.message("Invalid FHIR URL")
     }
     var request = URLRequest(url: url)

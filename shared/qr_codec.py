@@ -79,7 +79,7 @@ def to_tw_core_patient(data: PatientData) -> dict:
                 "value": data.id_number,
             }
         ],
-        "name": [{"use": "official", "text": data.name, "family": data.name[0], "given": [data.name[1:]]}],
+        "name": [{"use": "official", "text": data.name, "family": data.name[:1], "given": ([data.name[1:]] if len(data.name) > 1 else [])}],
         "gender": data.gender,
         "birthDate": data.birthday.strftime("%Y-%m-%d"),
         "telecom": [
