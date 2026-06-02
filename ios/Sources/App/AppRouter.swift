@@ -120,7 +120,7 @@ final class AppRouter: NSObject {
 
   func tab(_ index: Int, from source: UIViewController) {
     guard let tabBar = source.tabBarController else {
-      assertionFailure("AppRouter.tab(): source VC 沒有 tabBarController")
+      assertionFailure("AppRouter.tab(): source VC 沒有 tabBarController，請確認 rootViewController 設定為 UITabBarController")
       return
     }
     tabBar.selectedIndex = index
@@ -147,7 +147,8 @@ extension AppRouter: UINavigationControllerDelegate {
 extension AppRouter: UIGestureRecognizerDelegate {
   func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
     guard let nav = gestureRecognizer.view?.next as? UINavigationController else { return true }
-    return nav.viewControllers.count > 1
+    guard nav.viewControllers.count > 1 else { return false }
+    return (nav.topViewController?.appTransitionStyle ?? .push) == .push
   }
 }
 
