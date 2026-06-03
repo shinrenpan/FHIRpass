@@ -148,6 +148,11 @@ SQLite（MVP），只存醫院路由表，**不存任何個資**。
 `Deeplink.swift` 目前 `init?` 永遠回傳 `nil`（無已實作的 case）。
 待 AppContainer 設計完成後，在此加入 case 並實作 `makeHostController()`。
 
+### TWCoreFHIRModels（MVP 階段暫不引入）
+已評估 [`shinrenpan/TWCoreFHIRModels`](https://github.com/shinrenpan/TWCoreFHIRModels)，提供強型別 TW Core IG 1.0.0 API。
+MVP 階段 FHIR 邏輯薄、重構現有字串常數無實質功能效益，暫不引入。
+**引入時機**：功能擴充需在 iOS 端構建複雜 TW Core Resource（如醫療紀錄顯示、多欄位 Patient/Observation 建構）時再加入依賴。
+
 ## 首次設定（clone 後必做）
 
 ### 1. Python 虛擬環境
